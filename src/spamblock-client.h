@@ -20,9 +20,14 @@
 
 #include <gio/gio.h>
 
+
+#define CALLS_SERVICE	                     "org.gnome.Calls"
+#define CALLS_PATH	                     "/org/gnome/Calls"
+#define FREEDESKTOP_OBJECT_MANAGER_INTERFACE "org.freedesktop.DBus.ObjectManager"
+
 G_BEGIN_DECLS
 
-#define VVM_TYPE_VVMD (spam_block_get_type ())
+#define SPAM_TYPE_SPAMD (spam_block_get_type ())
 
 G_DECLARE_FINAL_TYPE (SpamBlock, spam_block, SPAM, SPAMD, GObject)
 
