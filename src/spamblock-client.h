@@ -31,6 +31,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (SpamBlock, spam_block, SPAM, SPAMD, GObject)
 
+/* From Calls calls-call.h */
+typedef enum
+{
+  CALLS_CALL_STATE_ACTIVE = 1,
+  CALLS_CALL_STATE_HELD,
+  CALLS_CALL_STATE_DIALING,
+  CALLS_CALL_STATE_ALERTING,
+  CALLS_CALL_STATE_INCOMING,
+  CALLS_CALL_STATE_WAITING,
+  CALLS_CALL_STATE_DISCONNECTED
+} CallsCallState;
+
 SpamBlock *spam_block_get_default (void);
 
 G_END_DECLS

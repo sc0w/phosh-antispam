@@ -31,26 +31,132 @@ struct _SpamBlock
 };
 
 static void
-call_added_cb (GDBusConnection *connection,
-                              const char      *sender_name,
-                              const char      *object_path,
-                              const char      *interface_name,
-                              const char      *signal_name,
-                              GVariant        *parameters,
-                              gpointer         user_data)
+hang_up_call (SpamBlock *self,
+              const char *interface,
+              const char *objectpath)
 {
-  //SpamBlock *self = user_data;
-  g_debug("Call Added!");
+
+  g_autoptr(GError) error = NULL;
+  GDBusProxy *hangup_proxy;
+  g_debug ("Hanging up: Objectpath: %s, Interface: %s",
+            objectpath, interface);
+
+  g_debug("Making proxy");
+  hangup_proxy = g_dbus_proxy_new_sync(
+		self->connection,
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+		NULL,
+		CALLS_SERVICE,
+		objectpath,
+		interface,
+		NULL,
+		&error);
+
+  if (error != NULL) {
+    g_warning ("Error making proxy: %s\n", error->message);
+    return;
+  }
+  g_debug("Making proxy call");
+  g_dbus_proxy_call_sync(hangup_proxy,
+                         "Hangup",
+                         NULL,
+                         G_DBUS_CALL_FLAGS_NONE,
+                         -1,
+                         NULL,
+                         &error);
+
+  if (error != NULL) {
+    g_warning ("Error Hanging up: %s\n", error->message);
+    return;
+  }
+}
+
+static void
+call_added_cb (GDBusConnection *connection,
+               const char      *sender_name,
+               const char      *object_path,
+               const char      *interface_name,
+               const char      *signal_name,
+               GVariant        *parameters,
+               gpointer         user_data)
+{
+  SpamBlock *self = user_data;
+  GVariant *properties, *properties_container, *interface_variant, *dict_variant;
+  g_autofree char *objectpath = NULL;
+  g_autofree char *interface = NULL;
+  g_autofree char *id = NULL;
+  g_autofree char *displayname = NULL;
+  g_autofree char *protocol = NULL;
+  gboolean encrypted, inbound;
+  guint32 state;
+  GVariantDict dict;
+
+  g_debug ("Call Added!");
+  g_variant_get (parameters, "(o@a{?*})", &objectpath, &properties_container);
+  properties = g_variant_get_child_value (properties_container, 0);
+  interface_variant = g_variant_get_child_value (properties, 0);
+  dict_variant = g_variant_get_child_value (properties, 1);
+  g_variant_get (interface_variant, "s", &interface);
+
+  g_variant_dict_init (&dict, dict_variant);
+  g_variant_dict_lookup (&dict, "Inbound", "b", &inbound);
+  g_variant_dict_lookup (&dict, "State", "u", &state);
+  g_variant_dict_lookup (&dict, "Id", "s", &id);
+  g_variant_dict_lookup (&dict, "DisplayName", "s", &displayname);
+  g_variant_dict_lookup (&dict, "Protocol", "s", &protocol);
+  g_variant_dict_lookup (&dict, "Encrypted", "b", &encrypted);
+
+  g_variant_unref (properties);
+  g_variant_unref (interface_variant);
+  g_variant_unref (dict_variant);
+
+  g_debug ("Objectpath: %s, Interface: %s, Inbound: %d, State: %u",
+            objectpath, interface, inbound, state);
+  g_debug ("Id: %s, Displayname: %s, Protocol: %s, encrypted: %d",
+            id, displayname, protocol, encrypted);
+
+  if (g_strcmp0 (protocol, "tel") != 0) {
+    g_debug ("Not a phone call, ignoring");
+    return;
+  }
+  if (state != CALLS_CALL_STATE_INCOMING) {
+    g_debug ("State is not INCOMING: %u", state);
+    return;
+  }
+  if (inbound == FALSE) {
+    g_debug ("Inbound is not INCOMING: %d", inbound);
+    return;
+  }
+
+  if (strlen(displayname) > 0) {
+    g_autofree char *spam_test = NULL;
+    spam_test = g_utf8_strdown (displayname, -1);
+    if (g_strcmp0 (spam_test, "spam") != 0) {
+      g_debug ("Display name is not blank, not marked as spam");
+      return;
+    } else {
+      g_debug ("Contact Marked as spam");
+      hang_up_call (self, interface, objectpath);
+    }
+  }
+
+  if (!(strlen(id) > 0)) {
+    g_debug("Id is blank, this is a blocked number");
+    //TODO: Add option to let blocked number through
+  }
+  //TODO: Add string match for certain classes of calls (i.e. area code, prefix)
+  hang_up_call (self, interface, objectpath);
+
 }
 
 static void
 call_removed_cb (GDBusConnection *connection,
-                              const char      *sender_name,
-                              const char      *object_path,
-                              const char      *interface_name,
-                              const char      *signal_name,
-                              GVariant        *parameters,
-                              gpointer         user_data)
+                 const char      *sender_name,
+                 const char      *object_path,
+                 const char      *interface_name,
+                 const char      *signal_name,
+                 GVariant        *parameters,
+                 gpointer         user_data)
 {
   //SpamBlock *self = user_data;
   g_debug("Call Removed!");
@@ -60,8 +166,8 @@ call_removed_cb (GDBusConnection *connection,
 
 static void
 get_calls_object_manager_interface_cb (GObject      *manager,
-                             GAsyncResult *res,
-                             gpointer      user_data)
+                                       GAsyncResult *res,
+                                       gpointer      user_data)
 {
   SpamBlock *self = user_data;
   g_autoptr (GError) error = NULL;
