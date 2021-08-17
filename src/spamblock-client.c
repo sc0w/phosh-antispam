@@ -22,18 +22,39 @@ struct _SpamBlock
 {
   GObject     parent_instance;
 
+  /* dbus connection */
   GDBusConnection  *connection;
   unsigned int      calls_watch_id;
 
+  /* dbus proxy */
   GDBusProxy       *calls_phone_proxy;
   unsigned int      calls_phone_signal_added_id;
   unsigned int      calls_phone_signal_removed_id;
+
+  /* Settings */
+  gboolean allow_blocked_numbers;
+  gboolean allow_callback;
+  char *allow_callback_number;
+  char **match_allow;
 };
+
+static gboolean
+spamblock_remove_callback_number (gpointer user_data)
+{
+  SpamBlock *self = user_data;
+  g_debug("Removing callback number");
+  g_free(self->allow_callback_number);
+  self->allow_callback_number = NULL;
+
+  return FALSE;
+}
 
 static void
 hang_up_call (SpamBlock *self,
               const char *interface,
-              const char *objectpath)
+              const char *objectpath,
+              const char *id,
+              gboolean    allow_callback)
 {
 
   g_autoptr(GError) error = NULL;
@@ -69,6 +90,17 @@ hang_up_call (SpamBlock *self,
     g_warning ("Error Hanging up: %s\n", error->message);
     return;
   }
+
+  if (allow_callback) {
+    g_debug ("Allowing callback");
+    g_free(self->allow_callback_number);
+    self->allow_callback_number = g_strdup(id);
+    //Setting timeout to 10 seconds;
+    g_timeout_add_seconds (10, spamblock_remove_callback_number, self);
+  } else {
+    g_debug ("Not allowing callback");
+  }
+
 }
 
 static void
@@ -88,6 +120,8 @@ call_added_cb (GDBusConnection *connection,
   g_autofree char *displayname = NULL;
   g_autofree char *protocol = NULL;
   gboolean encrypted, inbound;
+  unsigned int match_allow_length;
+  unsigned int match_allow_length_counter;
   guint32 state;
   GVariantDict dict;
 
@@ -128,6 +162,10 @@ call_added_cb (GDBusConnection *connection,
     return;
   }
 
+  if (g_strcmp0 (id, self->allow_callback_number) == 0) {
+    g_debug ("Number calling back, allowing");
+    return;
+  }
   if (strlen(displayname) > 0) {
     g_autofree char *spam_test = NULL;
     spam_test = g_utf8_strdown (displayname, -1);
@@ -135,17 +173,28 @@ call_added_cb (GDBusConnection *connection,
       g_debug ("Display name is not blank, not marked as spam");
       return;
     } else {
-      g_debug ("Contact Marked as spam");
-      hang_up_call (self, interface, objectpath);
+      g_warning ("Contact Marked as spam");
+      hang_up_call (self, interface, objectpath, id, FALSE);
     }
   }
-
+  match_allow_length = g_strv_length (self->match_allow);
+  for (match_allow_length_counter = 0; match_allow_length_counter < match_allow_length; match_allow_length_counter++) {
+    if (strstr(id, self->match_allow[match_allow_length_counter]) != NULL) {
+       g_debug ("Number is allowed to call");
+       return;
+    }
+  }
+  g_warning ("Number does not match allowed list");
   if (!(strlen(id) > 0)) {
     g_debug("Id is blank, this is a blocked number");
-    //TODO: Add option to let blocked number through
+    if (self->allow_blocked_numbers) {
+      g_debug ("Allowing blocked number");
+      return;
+    } else {
+      g_warning ("Not allowing blocked number");
+    }
   }
-  //TODO: Add string match for certain classes of calls (i.e. area code, prefix)
-  hang_up_call (self, interface, objectpath);
+  hang_up_call (self, interface, objectpath, id, self->allow_callback);
 
 }
 
@@ -254,6 +303,25 @@ calls_vanished_cb (GDBusConnection *connection,
 
 }
 
+static void
+spam_block_load_settings (SpamBlock *self)
+{
+  g_debug("Loading settings");
+  g_autofree char *match_list;
+
+  self->allow_callback_number = NULL;
+
+  self->allow_blocked_numbers = FALSE;
+  self->allow_callback = FALSE;
+  match_list = g_strdup("NULL"),
+  self->match_allow = g_strsplit (match_list, ",", -1);
+
+  g_debug("Allow blocked numbers set to %d", self->allow_blocked_numbers);
+  g_debug("Allow call back set to %d", self->allow_callback);
+  g_debug("Comma Seperated match allow list: %s", match_list);
+
+}
+
 G_DEFINE_TYPE (SpamBlock, spam_block, G_TYPE_OBJECT)
 
 static void
@@ -272,6 +340,9 @@ spam_block_finalize (GObject *object)
 
   calls_vanished_cb (NULL, NULL, object);
   g_bus_unwatch_name (self->calls_watch_id);
+
+  g_strfreev (self->match_allow);
+  g_free (self->allow_callback_number);
 
   G_OBJECT_CLASS (spam_block_parent_class)->finalize (object);
 }
@@ -299,6 +370,8 @@ spam_block_get_default (void)
     {
       self = g_object_new (SPAM_TYPE_SPAMD, NULL);
       g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
+
+      spam_block_load_settings (self);
 
       self->calls_watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                                CALLS_SERVICE,
