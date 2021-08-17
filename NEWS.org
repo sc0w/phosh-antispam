@@ -1,0 +1,5 @@
+phosh-antispam (1.0)
+
+  [ Chris Talbot ]
+  * Initial Release
+

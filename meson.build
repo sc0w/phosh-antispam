@@ -1,4 +1,5 @@
-project('phoshspamblock', 'c',        version: '0.1.0',
+project('phoshspamblock', 'c',
+        version: '1.0',
   meson_version: '>= 0.40.0',
 )
 
