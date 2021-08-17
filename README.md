@@ -41,6 +41,14 @@ Install:
 
     # meson install -C _build
 
+    (Install may require sudo or root privileges).
+
+Uninstall:
+
+    # ninja uninstall -C _build/
+
+    (Uninstall may require sudo or root privileges).
+
 ## Running from within the source code repository
 Meson will build the binary in builddir (_build, using the examples above), and
 can be invoked directly.
