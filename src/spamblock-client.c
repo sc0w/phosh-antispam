@@ -18,6 +18,9 @@
 
 #include "spamblock-client.h"
 
+#define SETTING_NAME     "gnome_calls_spam_options"
+#define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
+
 struct _SpamBlock
 {
   GObject     parent_instance;
@@ -303,17 +306,94 @@ calls_vanished_cb (GDBusConnection *connection,
 
 }
 
+static char
+*spam_block_get_settings_path (void)
+{
+  const char *homedir;
+
+  homedir = g_get_home_dir();
+  if (homedir == NULL)
+    return NULL;
+
+  return g_strdup_printf("%s/.config/%s", homedir, SETTING_NAME);
+}
+
 static void
 spam_block_load_settings (SpamBlock *self)
 {
   g_debug("Loading settings");
+  GKeyFile *keyfile;
   g_autofree char *match_list;
+  g_autofree char *settings_path;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *data;
+  gsize length = 0;
 
+  /* This is an ephemeral setting, do not load from anywhere */
   self->allow_callback_number = NULL;
 
-  self->allow_blocked_numbers = FALSE;
-  self->allow_callback = FALSE;
-  match_list = g_strdup("NULL"),
+  settings_path = spam_block_get_settings_path ();
+  g_debug ("Settings Path: %s", settings_path);
+
+  keyfile = g_key_file_new ();
+  g_key_file_load_from_file (keyfile, settings_path, 0, &error);
+  if(error) {
+    g_warning ("Error loading keyfile: %s\n", error->message);
+    error = NULL;
+  }
+
+  self->allow_blocked_numbers = g_key_file_get_boolean(keyfile,
+                                             SETTINGS_GROUP_SPAM_BLOCK,
+                                             "AllowBlockedNumbers",
+                                             &error);
+  if(error) {
+    g_warning ("Allow Blocked Numbers was not configured! Setting to FALSE.");
+    self->allow_blocked_numbers = FALSE;
+
+    g_key_file_set_boolean(keyfile,
+                           SETTINGS_GROUP_SPAM_BLOCK,
+                           "AllowBlockedNumbers",
+                           self->allow_blocked_numbers);
+
+    error = NULL;
+  }
+
+  self->allow_callback = g_key_file_get_boolean(keyfile,
+                                                SETTINGS_GROUP_SPAM_BLOCK,
+                                                "AllowCallback",
+                                                &error);
+  if(error) {
+    g_warning ("Allow Callback was not configured! Setting to TRUE.");
+    self->allow_callback = TRUE;
+
+    g_key_file_set_boolean(keyfile,
+                           SETTINGS_GROUP_SPAM_BLOCK,
+                           "AllowCallback",
+                           self->allow_callback);
+
+    error = NULL;
+  }
+
+  match_list = g_key_file_get_string(keyfile,
+                                     SETTINGS_GROUP_SPAM_BLOCK,
+                                     "Matchlist",
+                                     &error);
+  if(error) {
+    g_warning ("Allow Callback was not configured! Setting to TRUE.");
+    match_list = g_strdup("NULL");
+
+    g_key_file_set_string(keyfile,
+                          SETTINGS_GROUP_SPAM_BLOCK,
+                          "Matchlist",
+                          match_list);
+
+    error = NULL;
+  }
+
+  data = g_key_file_to_data(keyfile, &length, NULL);
+  g_file_set_contents(settings_path, data, length, NULL);
+  g_key_file_free(keyfile);
+
   self->match_allow = g_strsplit (match_list, ",", -1);
 
   g_debug("Allow blocked numbers set to %d", self->allow_blocked_numbers);
