@@ -26,7 +26,7 @@ To prepare/configure the project for compilation:
     # meson _build --sysconfdir=/etc
 
 (Note: --sysconfdir=/etc is not strictly necessary, but useful if you want
-to install VVM Player so the xdg autostart desktop file will install in
+to install Phosh Antispam so the xdg autostart desktop file will install in
 the correct place).
 
 To build the project:
@@ -46,6 +46,7 @@ Meson will build the binary in builddir (_build, using the examples above), and
 can be invoked directly.
 
   Run with debugging
+
     # G_MESSAGES_DEBUG=all ./_build/src/phoshspamblock
 
 ## General Configuration
