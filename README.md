@@ -23,7 +23,11 @@ supported Meson backend is required (e.g. ninja).
 
 To prepare/configure the project for compilation:
 
-    # meson _build
+    # meson _build --sysconfdir=/etc
+
+(Note: --sysconfdir=/etc is not strictly necessary, but useful if you want
+to install VVM Player so the xdg autostart desktop file will install in
+the correct place).
 
 To build the project:
 

@@ -1,0 +1,43 @@
+# Arabic translations for vvmplayer package.
+# Copyright (C) 2018 THE vvmplayer'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vvmplayer package.
+# Automatically generated, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vvmplayer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-08-19 12:49+0530\n"
+"PO-Revision-Date: 2018-08-19 12:49+0530\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/org.kop316.vvmplayer.desktop.in:3 src/vvmplayer-application.c:74
+#: src/vvmplayer-application.c:220
+msgid "VVM Player"
+msgstr ""
+
+#: data/org.kop316.vvmplayer.desktop.in:4
+msgid "Template for GTK Applications"
+msgstr ""
+
+#. Translators: Do NOT translate. This is icon name.
+#: data/org.kop316.vvmplayer.desktop.in:7
+msgid "org.kop316.vvmplayer"
+msgstr ""
+
+#: src/vvmplayer-application.c:53
+msgid "Quit all running instances of the application"
+msgstr ""
+
+#: src/vvmplayer-application.c:57
+msgid "Show release version"
+msgstr ""
+
+#: src/vvmplayer-application.c:81
+msgid "translator-credits"
+msgstr ""

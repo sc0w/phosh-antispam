@@ -1,0 +1,10 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/metainfo/org.kop316.vvmplayer.metainfo.xml.in
+data/org.kop316.vvmplayer.desktop.in.in
+data/org.kop316.vvmplayer.gschema.xml
+src/vvmplayer-application.c
+src/vvmplayer-window.c
+src/resources/ui/vvmplayer-window.ui
+src/resources/ui/vvmplayer-preferences-window.ui
+src/resources/ui/vvmplayer-voicemail-window.ui
