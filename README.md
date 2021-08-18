@@ -9,11 +9,11 @@ depending on the user's preferences.
 By default, if the number calling you is not in your contact list, or you have the contact listed as "Spam", Phosh AntiSpam will automatically tell GNOME Calls to hang up on the call. This will send it to voicemail. There are additionally these user configuration options:
 
 - Whether to block or allow blocked numbers (also called "Anonymous Number" in GNOME Calls)
-- If the caller calls back within 10 seconds of the first (blocked) call, whether to allow it through (in case it is a humon trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
+- If the caller calls back within 10 seconds of the first (blocked) call, whether to allow it through (in case it is a human trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
 - If you would like to match a certain type (or types) of number (for example, an area code or a number prefix) to let them through. For example, if you want to allow the area code `201` and the number prefix `312-555-*`, you could allow both combinations (and add others as well).
 
 ## Compiling Phosh Antispam
-In order to compile Phosh Antispam you need following software packages: 
+In order to compile Phosh Antispam you need following software packages:
 
 - GCC compiler
 - Gio library
@@ -70,17 +70,22 @@ can copy the following contents to `~/.config/gnome_calls_spam_options`
 
 ```
 [Spam Block]
-AllowBlockedNumbers=true
+EnableSpamBlock=true
+AllowBlockedNumbers=false
 AllowCallback=true
+CallbackTimeout=10
 Matchlist=NULL
 ```
 
-IMPORTANT NOTE: If you change settings in this file, You must restart Phosh
-                anti-spam in order for your settings to take effect!
+IMPORTANT NOTE: If you change settings in this file, You must restart Phosh anti-spam in order for your settings to take effect!
+
+EnableSpamBlock: Whether you want to enable Spam Block. This is useful if you just want to disable Phosh Anti-Spam for a short time and then re-enable.
 
 AllowBlockedNumbers: Whether you want to allow blocked numbers through.
 
 AllowCallback: Allows a ten second timeout for a number to call again and be let through. This can be useful if it is a human calling you.  Note this does not apply to contacts named "Spam", they will always be hung up on.
+
+CallbackTimeout: Time time in seconds for how long someone can call back a second time and be let through. Default is 10 seconds.
 
 Matchlist: A comma seperated list of numbers (or partial numbers) you want to allow through. For example, if you want to allow the area code `201` and the number prefix `312-555-*` through, you would make this line:
 ```

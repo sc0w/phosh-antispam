@@ -35,8 +35,10 @@ struct _SpamBlock
   unsigned int      calls_phone_signal_removed_id;
 
   /* Settings */
+  gboolean enable_spamblock;
   gboolean allow_blocked_numbers;
   gboolean allow_callback;
+  int callback_timeout;
   char *allow_callback_number;
   char **match_allow;
 };
@@ -98,8 +100,8 @@ hang_up_call (SpamBlock *self,
     g_debug ("Allowing callback");
     g_free(self->allow_callback_number);
     self->allow_callback_number = g_strdup(id);
-    //Setting timeout to 10 seconds;
-    g_timeout_add_seconds (10, spamblock_remove_callback_number, self);
+    //Setting timeout to user defined timeout;
+    g_timeout_add_seconds (self->callback_timeout, spamblock_remove_callback_number, self);
   } else {
     g_debug ("Not allowing callback");
   }
@@ -338,7 +340,23 @@ spam_block_load_settings (SpamBlock *self)
   keyfile = g_key_file_new ();
   g_key_file_load_from_file (keyfile, settings_path, 0, &error);
   if(error) {
-    g_warning ("Error loading keyfile: %s\n", error->message);
+    g_warning ("Error loading keyfile: %s", error->message);
+    error = NULL;
+  }
+
+  self->enable_spamblock = g_key_file_get_boolean(keyfile,
+                                                SETTINGS_GROUP_SPAM_BLOCK,
+                                                "EnableSpamBlock",
+                                                &error);
+  if(error) {
+    g_warning ("Enable SpamBlock was not configured! Setting to TRUE.");
+    self->enable_spamblock = TRUE;
+
+    g_key_file_set_boolean(keyfile,
+                           SETTINGS_GROUP_SPAM_BLOCK,
+                           "EnableSpamBlock",
+                           self->enable_spamblock);
+
     error = NULL;
   }
 
@@ -374,6 +392,38 @@ spam_block_load_settings (SpamBlock *self)
     error = NULL;
   }
 
+  self->callback_timeout = g_key_file_get_integer(keyfile,
+                                                  SETTINGS_GROUP_SPAM_BLOCK,
+                                                  "CallbackTimeout",
+                                                  &error);
+  if(error) {
+    g_warning ("Callback Timeout was not configured! Setting to 10 seconds.");
+    self->callback_timeout = 10;
+
+    g_key_file_set_integer(keyfile,
+                           SETTINGS_GROUP_SPAM_BLOCK,
+                           "CallbackTimeout",
+                           self->callback_timeout);
+
+    error = NULL;
+  }
+
+  self->enable_spamblock = g_key_file_get_boolean(keyfile,
+                                                SETTINGS_GROUP_SPAM_BLOCK,
+                                                "EnableSpamBlock",
+                                                &error);
+  if(error) {
+    g_warning ("Enable SpamBlock was not configured! Setting to TRUE.");
+    self->enable_spamblock = TRUE;
+
+    g_key_file_set_boolean(keyfile,
+                           SETTINGS_GROUP_SPAM_BLOCK,
+                           "EnableSpamBlock",
+                           self->enable_spamblock);
+
+    error = NULL;
+  }
+
   match_list = g_key_file_get_string(keyfile,
                                      SETTINGS_GROUP_SPAM_BLOCK,
                                      "Matchlist",
@@ -396,9 +446,12 @@ spam_block_load_settings (SpamBlock *self)
 
   self->match_allow = g_strsplit (match_list, ",", -1);
 
-  g_debug("Allow blocked numbers set to %d", self->allow_blocked_numbers);
-  g_debug("Allow call back set to %d", self->allow_callback);
-  g_debug("Comma Seperated match allow list: %s", match_list);
+  g_debug ("Enable SpamBlock set to %d", self->enable_spamblock);
+  g_debug ("Allow blocked numbers set to %d", self->allow_blocked_numbers);
+  g_debug ("Allow call back set to %d", self->allow_callback);
+  g_debug ("Callback Timeout set to %d seconds", self->callback_timeout);
+  g_debug ("Comma Seperated match allow list: %s", match_list);
+
 
 }
 
@@ -418,8 +471,10 @@ spam_block_finalize (GObject *object)
 {
   SpamBlock *self = (SpamBlock *)object;
 
-  calls_vanished_cb (NULL, NULL, object);
-  g_bus_unwatch_name (self->calls_watch_id);
+  if (self->enable_spamblock) {
+    calls_vanished_cb (NULL, NULL, object);
+    g_bus_unwatch_name (self->calls_watch_id);
+  }
 
   g_strfreev (self->match_allow);
   g_free (self->allow_callback_number);
@@ -446,21 +501,23 @@ spam_block_get_default (void)
 {
   static SpamBlock *self;
 
-  if (!self)
-    {
-      self = g_object_new (SPAM_TYPE_SPAMD, NULL);
-      g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
+  if (!self) {
+    self = g_object_new (SPAM_TYPE_SPAMD, NULL);
+    g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
 
-      spam_block_load_settings (self);
+    spam_block_load_settings (self);
 
+    if (self->enable_spamblock) {
       self->calls_watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                                CALLS_SERVICE,
                                                G_BUS_NAME_WATCHER_FLAGS_AUTO_START,
                                                (GBusNameAppearedCallback)calls_appeared_cb,
                                                (GBusNameVanishedCallback)calls_vanished_cb,
                                                self, NULL);
-
-
+    } else {
+      g_warning ("Spam Block is disabled! If you wish to enable, Please enable in settings and restart.");
     }
+
+  }
   return self;
 }
