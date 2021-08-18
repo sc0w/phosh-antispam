@@ -1,3 +1,9 @@
+phosh-antispam (1.1)
+
+  [ Chris Talbot ]
+  * Add option to disable blocking completely
+  * Add user option to define callback timeout
+
 phosh-antispam (1.0)
 
   [ Chris Talbot ]
