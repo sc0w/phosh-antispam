@@ -269,7 +269,7 @@ calls_appeared_cb (GDBusConnection *connection,
                   gpointer         user_data)
 {
   SpamBlock *self = user_data;
-  g_debug("VVMD Appeared");
+  g_debug("Calls Appeared");
 
   self->connection = connection;
 
