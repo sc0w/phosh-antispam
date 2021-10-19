@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>org.kop316.antispam</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Anti-Spam</name>
+  <summary>A GTK template application</summary>
+  <developer_name>Chris Talbot</developer_name>
+  <launchable type="desktop-id">org.kop316.antispam.desktop</launchable>
+
+  <description>
+    <p>
+      Anti-Spam is a simple GTK Application that can be used as a
+      template to begin your GTK Application development.  The
+      application is not by itself any much interesting.  Get the
+      source code and build your favorite application on top.
+
+
+      Both GTK3 and GTK4 are supported.  Use new-project.sh script
+      to create a new project.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Written in C programming language</li>
+      <li>[G]Object Oriented Design</li>
+      <li>Supports GTK3 and GTK4</li>
+      <li>Uses Meson build system</li>
+      <li>Flatpak support included</li>
+      <li>GitLab CI configuration included</li>
+      <li>Microsoft Windows support with MinGW and msitools</li>
+      <li>GtkBuilder .ui templates for UI</li>
+      <li>Application specific CSS</li>
+      <li>Keyboard shortcuts window</li>
+      <li>Handles commandline arguments</li>
+      <li>Tab completion for commandline</li>
+      <li>Internationalisation using gettext</li>
+      <li>Documentations for code using gtk-doc</li>
+      <li>Mallard based help for GNOME Help</li>
+      <li>Manpage in docbook XML format</li>
+      <li>GSettings integration</li>
+      <li>Symbolic and non-symbolic icons</li>
+      <li>Script to generate non-symbolic icons from symbolic ones</li>
+      <li>Uncrustify configuration and script</li>
+      <li>Meson based unit tests</li>
+    </ul>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window</caption>
+      <image width="764" height="524">
+        https://gitlab.com/kop316/phosh-antispam/raw/master/data/metainfo/01-window.png
+      </image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://gitlab.com/kop316/phosh-antispam</url>
+  <url type="bugtracker">https://gitlab.com/kop316/phosh-antispam/issues</url>
+  <url type="donation">https://liberapay.com/kop316/donate</url>
+  <url type="help">https://gitlab.com/kop316/phosh-antispam/wikis/home</url>
+  <project_group>GNOME</project_group>
+
+  <kudos>
+    <kudo>ModernToolkit</kudo>
+    <kudo>UserDocs</kudo>
+  </kudos>
+
+  <update_contact>chris@talbothome.com</update_contact>
+  <translation type="gettext">phosh-antispam</translation>
+
+  <!-- See https://hughsie.github.io/oars/ -->
+  <content_rating type="oars-1.1"/>
+  
+</component>

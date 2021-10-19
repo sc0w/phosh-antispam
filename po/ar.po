@@ -1,11 +1,11 @@
-# Arabic translations for vvmplayer package.
-# Copyright (C) 2018 THE vvmplayer'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the vvmplayer package.
+# Arabic translations for phosh-antispam package.
+# Copyright (C) 2018 THE phosh-antispam'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the phosh-antispam package.
 # Automatically generated, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: vvmplayer\n"
+"Project-Id-Version: phosh-antispam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-19 12:49+0530\n"
 "PO-Revision-Date: 2018-08-19 12:49+0530\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/org.kop316.vvmplayer.desktop.in:3 src/vvmplayer-application.c:74
-#: src/vvmplayer-application.c:220
-msgid "VVM Player"
+#: data/org.kop316.antispam.desktop.in:3 src/aspam-application.c:74
+#: src/aspam-application.c:220
+msgid "Anti-Spam"
 msgstr ""
 
-#: data/org.kop316.vvmplayer.desktop.in:4
+#: data/org.kop316.antispam.desktop.in:4
 msgid "Template for GTK Applications"
 msgstr ""
 
 #. Translators: Do NOT translate. This is icon name.
-#: data/org.kop316.vvmplayer.desktop.in:7
-msgid "org.kop316.vvmplayer"
+#: data/org.kop316.antispam.desktop.in:7
+msgid "org.kop316.antispam"
 msgstr ""
 
-#: src/vvmplayer-application.c:53
+#: src/aspam-application.c:53
 msgid "Quit all running instances of the application"
 msgstr ""
 
-#: src/vvmplayer-application.c:57
+#: src/aspam-application.c:57
 msgid "Show release version"
 msgstr ""
 
-#: src/vvmplayer-application.c:81
+#: src/aspam-application.c:81
 msgid "translator-credits"
 msgstr ""

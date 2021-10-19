@@ -1,1 +1,1 @@
-i18n.gettext('vvmplayer', preset: 'glib')
+i18n.gettext('phosh-antispam', preset: 'glib')

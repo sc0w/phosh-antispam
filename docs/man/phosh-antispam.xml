@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="phosh-antispam">
+
+<refentryinfo>
+  <title>phosh-antispam</title>
+  <productname>GTK Template</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Chris</firstname>
+      <surname>Talbot</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>phosh-antispam</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>phosh-antispam</refname>
+  <refpurpose>GTK Template Application</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <cmdsynopsis>
+    <command>phosh-antispam</command>
+    <arg choice="opt">--dummy <replaceable>EXAMPLE</replaceable></arg>
+    <arg choice="opt">--help</arg>
+    <arg choice="opt">--quit</arg>
+    <arg choice="opt">--verbose</arg>
+    <arg choice="opt">--version</arg>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+  <title>Description</title>
+<para>
+  <command>phosh-antispam</command> is a simple GTK application
+  that can be used as a template for developing GTK applications in C.
+</para>
+<para>
+  The template contains basic GTK application with meson build script,
+  basic tests using glib test, an example man page, help page using
+  mallard, and gtk-doc documentation, etc. are included.
+</para>
+</refsect1>
+
+<refsect1>
+  <title>Options</title>
+<para>The following options are understood:</para>
+<variablelist>
+
+  <varlistentry>
+    <term>
+      <option>--dummy <optional>EXAMPLE</optional></option>
+    </term>
+    <listitem>
+      <para>
+        This doesn't exist.  Just to show how an optional argument
+        can be added.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>
+      <option>-h</option>, <option>--help</option>
+    </term>
+    <listitem>
+      <para>Show help options</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>
+      <option>--quit</option>
+    </term>
+    <listitem>
+      <para>
+      Force quit the application.  Any unsaved changes will be lost
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>
+      <option>-v</option>, <option>--verbose</option>
+    </term>
+    <listitem>
+      <para>
+        Show verbose logs when running. Use multiple times to increase
+        log verbosity.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>
+      <option>--version</option>
+    </term>
+    <listitem>
+      <para>
+        Show version information and exit.  This won't quit already
+        running instance of the application.
+      </para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+</refsect1>
+
+</refentry>

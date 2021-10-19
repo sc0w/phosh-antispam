@@ -1,6 +1,7 @@
+/* -*- mode: c; c-basic-offset: 2; indent-tabs-mode: nil; -*- */
 /* main.c
  *
- * Copyright 2021 Chris Talbot
+ * Copyright 2021 Chris Talbot <chris@talbothome.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,76 +15,41 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Author(s):
+ *   Chris Talbot <chris@talbothome.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "phoshspamblock-config.h"
-#include "spamblock-client.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include <glib.h>
-#include <gio/gio.h>
-#include <stdlib.h>
+#include <gtk/gtk.h>
+#include <libintl.h>
+#include <locale.h>
 
-static GMainLoop *main_loop = NULL;
+#include "aspam-utils.h"
+#include "aspam-application.h"
+#include "aspam-log.h"
 
-static volatile sig_atomic_t __terminated = 0;
-
-static void sig_term (int sig)
+int
+main (int   argc,
+      char *argv[])
 {
-	if (__terminated > 0)
-		return;
+  g_autoptr(ASpamApplication) application = NULL;
 
-	__terminated = 1;
+  g_assert (ASPAM_IS_MAIN_THREAD ());
 
-	g_print ("Terminating\n");
+  aspam_log_init ();
 
-	g_main_loop_quit (main_loop);
-}
+  g_set_prgname (PACKAGE_ID);
+  application = aspam_application_new ();
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
-gint
-main (gint   argc,
-      gchar *argv[])
-{
-  g_autoptr(GOptionContext) context = NULL;
-  g_autoptr(GError) error = NULL;
-  struct sigaction sa;
-  gboolean version = FALSE;
-  SpamBlock *backend;
-
-  GOptionEntry main_entries[] = {
-    { "version", 0, 0, G_OPTION_ARG_NONE, &version, "Show program version" },
-    { NULL }
-  };
-
-  context = g_option_context_new ("- my command line tool");
-  g_option_context_add_main_entries (context, main_entries, NULL);
-
-  if (!g_option_context_parse (context, &argc, &argv, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      return EXIT_FAILURE;
-    }
-
-  main_loop = g_main_loop_new (NULL, FALSE);
-
-  if (version)
-    {
-      g_printerr ("%s\n", PACKAGE_VERSION);
-      return EXIT_SUCCESS;
-    }
-
-  sa.sa_handler = sig_term;
-  sigaction (SIGINT, &sa, NULL);
-  sigaction (SIGTERM, &sa, NULL);
-
-  g_debug ("Making object");
-
-  backend = spam_block_get_default ();
-
-  g_main_loop_run (main_loop);
-
-  g_object_unref (backend);
-
-  g_main_loop_unref (main_loop);
-
-  return EXIT_SUCCESS;
+  return g_application_run (G_APPLICATION (application), argc, argv);
 }

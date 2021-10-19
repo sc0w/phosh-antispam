@@ -1,6 +1,7 @@
-/* main.c
+/* -*- mode: c; c-basic-offset: 2; indent-tabs-mode: nil; -*- */
+/* aspam-window.h
  *
- * Copyright 2021 Chris Talbot
+ * Copyright 2021 Chris Talbot <chris@talbothome.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,35 +15,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Author(s):
+ *   Chris Talbot <chris@talbothome.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gio/gio.h>
+#include <gtk/gtk.h>
 
-
-#define CALLS_SERVICE	                     "org.gnome.Calls"
-#define CALLS_PATH	                     "/org/gnome/Calls"
-#define FREEDESKTOP_OBJECT_MANAGER_INTERFACE "org.freedesktop.DBus.ObjectManager"
+#include "aspam-settings.h"
 
 G_BEGIN_DECLS
 
-#define SPAM_TYPE_SPAMD (spam_block_get_type ())
+#define ASPAM_TYPE_WINDOW (aspam_window_get_type ())
 
-G_DECLARE_FINAL_TYPE (SpamBlock, spam_block, SPAM, SPAMD, GObject)
+G_DECLARE_FINAL_TYPE (ASpamWindow, aspam_window, ASPAM, WINDOW, GtkApplicationWindow)
 
-/* From Calls calls-call.h */
-typedef enum
-{
-  CALLS_CALL_STATE_ACTIVE = 1,
-  CALLS_CALL_STATE_HELD,
-  CALLS_CALL_STATE_DIALING,
-  CALLS_CALL_STATE_ALERTING,
-  CALLS_CALL_STATE_INCOMING,
-  CALLS_CALL_STATE_WAITING,
-  CALLS_CALL_STATE_DISCONNECTED
-} CallsCallState;
-
-SpamBlock *spam_block_get_default (void);
+GtkWidget *aspam_window_new (GtkApplication *application,
+                           ASpamSettings    *settings);
 
 G_END_DECLS

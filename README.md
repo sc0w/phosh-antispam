@@ -12,6 +12,14 @@ By default, if the number calling you is not in your contact list, or you have t
 - If the caller calls back within 10 seconds of the first (blocked) call, whether to allow it through (in case it is a human trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
 - If you would like to match a certain type (or types) of number (for example, an area code or a number prefix) to let them through. For example, if you want to allow the area code `201` and the number prefix `312-555-*`, you could allow both combinations (and add others as well).
 
+## License
+Unless otherwise specified, all code is licensed under the GPL Version 3 or later
+ https://www.gnu.org/licenses/gpl-3.0.en.html
+
+All other images/data is licensed under  Creative Commons
+Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+https://creativecommons.org/licenses/by-sa/4.0/
+
 ## Compiling Phosh Antispam
 In order to compile Phosh Antispam you need following software packages:
 
@@ -91,4 +99,5 @@ Matchlist: A comma seperated list of numbers (or partial numbers) you want to al
 ```
 Matchlist=201,312555
 ```
+
 
