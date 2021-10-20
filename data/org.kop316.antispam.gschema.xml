@@ -33,9 +33,9 @@
     </key>
 
     <key name="callback-timeout" type="i">
-      <default>10</default>
+      <default>1</default>
       <summary>Callback Grace Period</summary>
-      <description>Time in seconds to allow a callback.</description>
+      <description>Time in minutes to allow a callback.</description>
     </key>
 
     <key name="allow-blocked-numbers" type="b">
