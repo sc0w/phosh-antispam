@@ -263,7 +263,7 @@ aspam_settings_init (ASpamSettings *self)
 }
 
 /**
- * aspam_settings_new:
+ * aspam_settings_get_default:
  *
  * Create a new #ASpamSettings
  *
@@ -271,9 +271,15 @@ aspam_settings_init (ASpamSettings *self)
  * Free with g_object_unref().
  */
 ASpamSettings *
-aspam_settings_new (void)
+aspam_settings_get_default (void)
 {
-  return g_object_new (ASPAM_TYPE_SETTINGS, NULL);
+  static ASpamSettings *self;
+
+  if (!self) {
+    self = g_object_new (ASPAM_TYPE_SETTINGS, NULL);
+    g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
+  }
+  return self;
 }
 
 /**

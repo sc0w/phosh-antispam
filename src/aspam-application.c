@@ -178,7 +178,7 @@ aspam_application_startup (GApplication *application)
   g_set_application_name (_("Anti-Spam"));
   gtk_window_set_default_icon_name (PACKAGE_ID);
 
-  self->settings = aspam_settings_new ();
+  self->settings = aspam_settings_get_default ();
   self->client = aspam_client_get_default ();
   css_provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (css_provider,

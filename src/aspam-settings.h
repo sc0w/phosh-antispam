@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (ASpamSettings, aspam_settings, ASPAM, SETTINGS, GObject)
 
-ASpamSettings *aspam_settings_new                  (void);
+ASpamSettings *aspam_settings_get_default        (void);
 void         aspam_settings_save                 (ASpamSettings *self);
 
 gboolean     aspam_settings_get_is_first_run     (ASpamSettings *self);
