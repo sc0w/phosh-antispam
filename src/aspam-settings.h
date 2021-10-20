@@ -57,5 +57,5 @@ void         aspam_settings_set_callback_timeout (ASpamSettings *self,
                                                   int timeout);
 const char **aspam_settings_get_match_list (ASpamSettings *self);
 void         aspam_settings_set_match_list (ASpamSettings *self,
-                                           char **match_list);
+                                            char **match_list);
 G_END_DECLS

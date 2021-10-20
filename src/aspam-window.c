@@ -59,7 +59,7 @@ static void
 aspam_window_show_about (ASpamWindow *self)
 {
   const char *authors[] = {
-    "Chris Talbot https://www.sadiqpk.org",
+    "Chris Talbot https://www.gitlab.com/kop316/",
     NULL
   };
 

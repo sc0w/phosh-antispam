@@ -143,9 +143,35 @@ void
 aspam_settings_set_match_list (ASpamSettings *self,
                                char **match_list)
 {
+  g_autoptr(GError) error = NULL;
+  g_autofree char *csv = NULL;
+  g_autoptr(GFile) whitelist_file = NULL;
+  int size = 0;
+
   g_assert (ASPAM_IS_SETTINGS (self));
-  /* TODO: This will be a CSV saved to a file */
-  g_warning ("This is not implimented");
+
+  csv = g_strjoinv (",", match_list);
+
+  if (csv)
+    size = strlen (csv);
+  else
+    return;
+
+  whitelist_file = g_file_new_build_filename (g_get_user_config_dir (),
+                                              "phoshantispam",
+                                              "whitelist.csv",
+                                              NULL);
+
+  if (!g_file_replace_contents (whitelist_file, csv, size, NULL, FALSE,
+                                G_FILE_CREATE_NONE, NULL, NULL, &error)) {
+    g_warning ("Failed to write to file %s: %s",
+               g_file_peek_path (whitelist_file), error->message);
+    return;
+  }
+
+  g_strfreev (self->match_list);
+  self->match_list = g_strsplit (csv, ",", -1);
+  return;
 }
 
 static void
@@ -173,6 +199,53 @@ static void
 aspam_settings_init (ASpamSettings *self)
 {
   g_autofree char *version = NULL;
+  g_autofree char *contents = NULL;
+  g_autoptr(GFile) whitelist_file = NULL;
+  g_autoptr(GFile) whitelist_dir = NULL;
+  g_autoptr(GError) error = NULL;
+  gulong length = 0;
+
+  whitelist_dir = g_file_new_build_filename (g_get_user_config_dir (),
+                                              "phoshantispam",
+                                              NULL);
+
+  if (!g_file_make_directory_with_parents (whitelist_dir, NULL, &error)) {
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+      g_debug ("Directory exists, skipping error...");
+      g_clear_error (&error);
+    } else if (error) {
+      g_warning ("Error creating Directory: %s", error->message);
+      g_clear_error (&error);
+    }
+  }
+
+  whitelist_file = g_file_new_build_filename (g_get_user_config_dir (),
+                                              "phoshantispam",
+                                              "whitelist.csv",
+                                              NULL);
+
+  g_file_load_contents (whitelist_file,
+                        NULL,
+                        &contents,
+                        &length,
+                        NULL,
+                        &error);
+
+  if (error && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND)) {
+    g_auto(GStrv) new_match_list = NULL;
+    g_debug ("There is no CSV File! Making a blank one.");
+    new_match_list = g_strsplit ("", ",", -1);
+    aspam_settings_set_match_list (self, new_match_list);
+    g_clear_error (&error);
+  } else if (error) {
+    g_warning ("Error loading CSV File: %s. Making a blank one.", error->message);
+    g_auto(GStrv) new_match_list = NULL;
+    new_match_list = g_strsplit ("", ",", -1);
+    g_clear_error (&error);
+  } else {
+    g_debug ("File Contents %s", contents);
+    self->match_list = g_strsplit (contents, ",", -1);
+  }
 
   self->app_settings = g_settings_new (PACKAGE_ID);
   version = g_settings_get_string (self->app_settings, "version");
@@ -181,8 +254,6 @@ aspam_settings_init (ASpamSettings *self)
   self->allow_blocked_numbers = g_settings_get_boolean (self->app_settings, "allow-blocked-numbers");
   self->allow_callback = g_settings_get_boolean (self->app_settings, "allow-callback");
   self->callback_timeout = g_settings_get_int (self->app_settings, "callback-timeout");
-
-  //TODO: populate: self->match_list
 
 
   if (!g_str_equal (version, PACKAGE_VERSION))
