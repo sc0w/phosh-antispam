@@ -68,14 +68,10 @@ aspam_window_window_populate (ASpamWindow *self)
 {
   g_autofree char *callback_timeout_string = NULL;
   ASpamSettings *settings;
-  int callback_timeout;
+  guint64 callback_timeout;
   g_assert (ASPAM_IS_WINDOW (self));
   settings = aspam_settings_get_default ();
-/*
-  GtkWidget   *callback_timeout_text;
-  GtkWidget   *whitelist_list_box;
-  GtkWidget   *new_whitelist_button;
-*/
+
   gtk_switch_set_active (GTK_SWITCH (self->enable_aspam_switch),
                          aspam_settings_get_enable_aspamclient (settings));
   gtk_switch_set_active (GTK_SWITCH (self->allow_callback_switch),
@@ -83,14 +79,96 @@ aspam_window_window_populate (ASpamWindow *self)
   gtk_switch_set_active (GTK_SWITCH (self->allow_blocked_numbers_switch),
                          aspam_settings_get_allow_blocked_numbers (settings));
 
-  gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text),
-                      "");
+  gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
   callback_timeout = aspam_settings_get_callback_timeout (settings);
-  callback_timeout_string = g_strdup_printf("%i", callback_timeout);
-  /* TODO: Set the callback timeout! */
+  callback_timeout_string = g_strdup_printf("%li", callback_timeout);
   gtk_entry_set_text (GTK_ENTRY (self->callback_timeout_text),
                       callback_timeout_string);
 }
+
+
+static void
+enable_aspam_switch_flipped_cb (ASpamWindow *self)
+{
+  ASpamSettings *settings;
+  gboolean enable_aspam;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  settings = aspam_settings_get_default ();
+  enable_aspam = gtk_switch_get_active (GTK_SWITCH (self->enable_aspam_switch));
+  aspam_settings_set_enable_aspamclient (settings, enable_aspam);
+}
+
+static void
+allow_callback_switch_flipped_cb (ASpamWindow *self)
+{
+  ASpamSettings *settings;
+  gboolean allow_callback;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  settings = aspam_settings_get_default ();
+  allow_callback = gtk_switch_get_active (GTK_SWITCH (self->allow_callback_switch));
+  aspam_settings_set_allow_callback (settings, allow_callback);
+}
+
+static void
+allow_blocked_numbers_switch_flipped_cb (ASpamWindow *self)
+{
+  ASpamSettings *settings;
+  gboolean allow_blocked_numbers;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  settings = aspam_settings_get_default ();
+  allow_blocked_numbers = gtk_switch_get_active (GTK_SWITCH (self->allow_blocked_numbers_switch));
+  aspam_settings_set_allow_blocked_numbers (settings, allow_blocked_numbers);
+}
+
+static void
+callback_timeout_button_clicked_cb (ASpamWindow *self)
+{
+  g_autoptr(GError) error = NULL;
+  ASpamSettings *settings;
+  const char *timeout_string;
+  guint64 new_timeout;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  settings = aspam_settings_get_default ();
+
+  timeout_string = gtk_entry_get_text (GTK_ENTRY (self->callback_timeout_text));
+
+  g_ascii_string_to_unsigned (timeout_string, 10, 0, 9999, &new_timeout, &error);
+  if (error) {
+    guint64 callback_timeout;
+    g_autofree char *callback_timeout_string = NULL;
+    g_warning ("Error converting string to unsigned 64: %s", error->message);
+    callback_timeout = aspam_settings_get_callback_timeout (settings);
+    callback_timeout_string = g_strdup_printf("%li", callback_timeout);
+    gtk_entry_set_text (GTK_ENTRY (self->callback_timeout_text),
+                        callback_timeout_string);
+  } else {
+    aspam_settings_set_callback_timeout (settings, new_timeout);
+  }
+}
+
+static void
+new_whitelist_button_clicked_cb (ASpamWindow *self)
+{
+  g_autoptr(GError) error = NULL;
+  //ASpamSettings *settings;
+  const char *new_pattern;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  //settings = aspam_settings_get_default ();
+
+  new_pattern = gtk_entry_get_text (GTK_ENTRY (self->new_whitelist_text));
+
+  g_warning ("Adding new patter not implimented: %s", new_pattern);
+
+  gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
+}
+
+
+
 
 static void
 aspam_window_show_about (ASpamWindow *self)
@@ -215,6 +293,7 @@ aspam_window_class_init (ASpamWindowClass *klass)
                                                "ui/aspam-window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, menu_button);
+  gtk_widget_class_bind_template_child (widget_class, ASpamWindow, enable_aspam_switch);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, allow_callback_switch);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_text);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_button);
@@ -224,6 +303,12 @@ aspam_window_class_init (ASpamWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, new_whitelist_button);
 
   gtk_widget_class_bind_template_callback (widget_class, aspam_window_show_about);
+  gtk_widget_class_bind_template_callback (widget_class, allow_callback_switch_flipped_cb);
+  gtk_widget_class_bind_template_callback (widget_class, callback_timeout_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, new_whitelist_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, enable_aspam_switch_flipped_cb);
+  gtk_widget_class_bind_template_callback (widget_class, allow_blocked_numbers_switch_flipped_cb);
+
 }
 
 static void
