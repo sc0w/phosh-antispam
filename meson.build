@@ -1,6 +1,6 @@
 project(
   'phosh-antispam', 'c',
-  version: '1.2~alpha',
+  version: '2.0~alpha',
   meson_version: '>= 0.50.0',
   license: 'GPL3+',
   default_options: [
