@@ -149,10 +149,10 @@ call_added_cb (GDBusConnection *connection,
   g_variant_unref (interface_variant);
   g_variant_unref (dict_variant);
 
-  g_debug ("Objectpath: %s, Interface: %s, Inbound: %d, State: %u",
-            objectpath, interface, inbound, state);
-  g_debug ("Id: %s, Displayname: %s, Protocol: %s, encrypted: %d",
-            id, displayname, protocol, encrypted);
+  if (!self->enable_aspamclient) {
+    g_debug ("Spam filtering is disabled!");
+    return;
+  }
 
   if (g_strcmp0 (protocol, "tel") != 0) {
     g_debug ("Not a phone call, ignoring");
@@ -166,6 +166,7 @@ call_added_cb (GDBusConnection *connection,
     g_debug ("Inbound is not INCOMING: %d", inbound);
     return;
   }
+
 
   if (g_strcmp0 (id, self->allow_callback_number) == 0) {
     g_debug ("Number calling back, allowing");
@@ -507,17 +508,13 @@ aspam_client_get_default (void)
 
     aspam_client_load_settings (self);
 
-    if (self->enable_aspamclient) {
-      self->calls_watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                               CALLS_SERVICE,
-                                               G_BUS_NAME_WATCHER_FLAGS_AUTO_START,
-                                               (GBusNameAppearedCallback)calls_appeared_cb,
-                                               (GBusNameVanishedCallback)calls_vanished_cb,
-                                               self, NULL);
-    } else {
-      g_warning ("Spam Block is disabled! If you wish to enable, Please enable in settings and restart.");
-    }
 
+    self->calls_watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                             CALLS_SERVICE,
+                                             G_BUS_NAME_WATCHER_FLAGS_AUTO_START,
+                                             (GBusNameAppearedCallback)calls_appeared_cb,
+                                             (GBusNameVanishedCallback)calls_vanished_cb,
+                                             self, NULL);
   }
   return self;
 }
