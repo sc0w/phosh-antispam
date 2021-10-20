@@ -20,5 +20,29 @@
       <description>Window size (width, height).</description>
     </key>
 
+    <key name="enable" type="b">
+      <default>false</default>
+      <summary>Enable Anti-Spam</summary>
+      <description>Enable all spam filtering.</description>
+    </key>
+
+    <key name="allow-callback" type="b">
+      <default>true</default>
+      <summary>Allow Callback</summary>
+      <description>Allow number through on callback.</description>
+    </key>
+
+    <key name="callback-timeout" type="i">
+      <default>10</default>
+      <summary>Callback Grace Period</summary>
+      <description>Time in seconds to allow a callback.</description>
+    </key>
+
+    <key name="allow-blocked-numbers" type="b">
+      <default>false</default>
+      <summary>Allow Anonymous Numbers</summary>
+      <description>Allow a caller without a number.</description>
+    </key>
+
   </schema>
 </schemalist>

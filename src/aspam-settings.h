@@ -43,4 +43,19 @@ void         aspam_settings_get_window_geometry  (ASpamSettings  *self,
                                                 GdkRectangle *geometry);
 void         aspam_settings_set_window_geometry  (ASpamSettings  *self,
                                                 GdkRectangle *geometry);
+gboolean     aspam_settings_get_enable_aspamclient (ASpamSettings *self);
+void         aspam_settings_set_enable_aspamclient (ASpamSettings *self,
+                                                    gboolean enable);
+gboolean     aspam_settings_get_allow_blocked_numbers (ASpamSettings *self);
+void         aspam_settings_set_allow_blocked_numbers (ASpamSettings *self,
+                                                       gboolean enable);
+gboolean     aspam_settings_get_allow_callback (ASpamSettings *self);
+void         aspam_settings_set_allow_callback (ASpamSettings *self,
+                                                gboolean enable);
+int          aspam_settings_get_callback_timeout (ASpamSettings *self);
+void         aspam_settings_set_callback_timeout (ASpamSettings *self,
+                                                  int timeout);
+const char **aspam_settings_get_match_list (ASpamSettings *self);
+void         aspam_settings_set_match_list (ASpamSettings *self,
+                                           char **match_list);
 G_END_DECLS

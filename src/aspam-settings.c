@@ -47,10 +47,106 @@ struct _ASpamSettings
 
   GSettings *app_settings;
   gboolean   first_run;
+
+  gboolean enable_aspamclient;
+  gboolean allow_blocked_numbers;
+  gboolean allow_callback;
+  int callback_timeout;
+  char **match_list;
 };
 
 G_DEFINE_TYPE (ASpamSettings, aspam_settings, G_TYPE_OBJECT)
 
+gboolean
+aspam_settings_get_enable_aspamclient (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return self->enable_aspamclient;
+}
+
+void
+aspam_settings_set_enable_aspamclient (ASpamSettings *self,
+                                       gboolean enable)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  self->enable_aspamclient = enable;
+  g_settings_set_boolean (self->app_settings, "enable", self->enable_aspamclient);
+  g_settings_apply (self->app_settings);
+}
+
+gboolean
+aspam_settings_get_allow_blocked_numbers (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return self->allow_blocked_numbers;
+}
+
+void
+aspam_settings_set_allow_blocked_numbers (ASpamSettings *self,
+                                          gboolean enable)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+  self->allow_blocked_numbers = enable;
+  g_settings_set_boolean (self->app_settings, "allow-blocked-numbers", self->allow_blocked_numbers);
+  g_settings_apply (self->app_settings);
+}
+
+gboolean
+aspam_settings_get_allow_callback (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return self->allow_callback;
+}
+
+void
+aspam_settings_set_allow_callback (ASpamSettings *self,
+                                       gboolean enable)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+  self->allow_callback = enable;
+  g_settings_set_boolean (self->app_settings, "allow-callback", self->allow_callback);
+  g_settings_apply (self->app_settings);
+}
+
+int
+aspam_settings_get_callback_timeout (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return self->callback_timeout;
+}
+
+void
+aspam_settings_set_callback_timeout (ASpamSettings *self,
+                                     int timeout)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+  self->callback_timeout = timeout;
+  g_settings_set_int (self->app_settings, "callback-timeout", self->callback_timeout);
+  g_settings_apply (self->app_settings);
+}
+
+
+const char **
+aspam_settings_get_match_list (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return (const char **)self->match_list;
+}
+
+void
+aspam_settings_set_match_list (ASpamSettings *self,
+                               char **match_list)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+  /* TODO: This will be a CSV saved to a file */
+  g_warning ("This is not implimented");
+}
 
 static void
 aspam_settings_dispose (GObject *object)
@@ -80,6 +176,14 @@ aspam_settings_init (ASpamSettings *self)
 
   self->app_settings = g_settings_new (PACKAGE_ID);
   version = g_settings_get_string (self->app_settings, "version");
+
+  self->enable_aspamclient = g_settings_get_boolean (self->app_settings, "enable");
+  self->allow_blocked_numbers = g_settings_get_boolean (self->app_settings, "allow-blocked-numbers");
+  self->allow_callback = g_settings_get_boolean (self->app_settings, "allow-callback");
+  self->callback_timeout = g_settings_get_int (self->app_settings, "callback-timeout");
+
+  //TODO: populate: self->match_list
+
 
   if (!g_str_equal (version, PACKAGE_VERSION))
     self->first_run = TRUE;
