@@ -11,54 +11,21 @@
         <property name="can-focus">False</property>
         <property name="icon-name">preferences-window-layout-symbolic</property>
         <property name="title">Layout</property>
+
         <child>
           <object class="HdyPreferencesGroup">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+
             <child>
-              <object class="HdyPreferencesRow">
+              <object class="HdyActionRow" id="enable_aspam">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="title" bind-source="welcome_label" bind-property="label" bind-flags="sync-create"/>
-                <child>
-                  <object class="GtkLabel" id="welcome_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Visual Voicemail Settings &amp; Status</property>
-                    <property name="ellipsize">end</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="HdyActionRow">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="use-underline">True</property>
-                <property name="title" translatable="yes">Refresh Page</property>
-                <child>
-                  <object class="GtkButton" id="refresh_settings_button">
-                    <property name="label" translatable="yes">Apply</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">end</property>
-                    <property name="valign">center</property>
-                    <style>
-                      <class name="list-button"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="HdyActionRow" id="enable_vvm_text">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="title" translatable="yes">Enable VVM</property>
+                <property name="title" translatable="yes">Enable Anti-Spam</property>
+                <property name="subtitle" translatable="yes">Enable All Spam filtering</property>
                 <property name="use-underline">True</property>
                 <child>
-                  <object class="GtkSwitch" id="enable_vvm_switch">
+                  <object class="GtkSwitch" id="enable_aspam_switch">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="valign">center</property>
@@ -68,9 +35,135 @@
             </child>
           </object>
         </child>
+
+        <child>
+          <object class="HdyPreferencesGroup">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="title" translatable="yes">Allow Callback</property>
+            <property name="description" translatable="yes">A human will usually callback a second time, so these settings allow that second call to not considered spam.</property>
+
+            <child>
+              <object class="HdyActionRow" id="allow_callback">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="title" translatable="yes">Allow Callback</property>
+                <property name="subtitle" translatable="yes">Allow number through on callback</property>
+                <property name="use-underline">True</property>
+                <child>
+                  <object class="GtkSwitch" id="allow_callback_switch">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="HdyActionRow" id="callback_timeout">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="title" translatable="yes">Callback Grace Period</property>
+                <child>
+                  <object class="GtkEntry" id="callback_timeout_text">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                    <property name="width-chars">5</property>
+                    <property name="placeholder-text" translatable="yes">Sec</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="mms_save_button">
+                    <property name="visible">True</property>
+                    <property name="use-underline">1</property>
+                    <property name="valign">center</property>
+                   <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">emblem-ok-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="HdyPreferencesGroup">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="title" translatable="yes">Whitelist Patterns</property>
+            <property name="description" translatable="yes">The Whitelist can allow anonymous numbers and will allow any number that contains the below patterns.</property>
+
+
+            <child>
+              <object class="HdyActionRow" id="allow_blocked_numbers">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="title" translatable="yes">Allow Anonymous Numbers</property>
+                <property name="subtitle" translatable="yes">Allow a caller without a number</property>
+                <property name="use-underline">True</property>
+                <child>
+                  <object class="GtkSwitch" id="allow_blocked_numbers_switch">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkListBox" id="contacts_list_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="expand">True</property>
+                <property name="selection-mode">none</property>
+                  <style>
+                    <class name="content"/>
+                  </style>
+              </object>
+            </child>
+
+            <child>
+              <object class="HdyActionRow" id="new_whitelist">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkEntry" id="new_whitelist_text">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="placeholder-text" translatable="yes">Add new whitelist pattern</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="new_whitelist_button">
+                    <property name="visible">True</property>
+                    <property name="use-underline">1</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">emblem-ok-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+          </object>
+        </child>
       </object>
     </child>
-
 
     <!-- Headerbar -->
     <child type="titlebar">
