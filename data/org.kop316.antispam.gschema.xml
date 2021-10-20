@@ -32,7 +32,7 @@
       <description>Allow number through on callback.</description>
     </key>
 
-    <key name="callback-timeout" type="i">
+    <key name="callback-timeout" type="t">
       <default>1</default>
       <summary>Callback Grace Period</summary>
       <description>Time in minutes to allow a callback.</description>

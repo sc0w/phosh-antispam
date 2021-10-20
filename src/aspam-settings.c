@@ -51,7 +51,7 @@ struct _ASpamSettings
   gboolean enable_aspamclient;
   gboolean allow_blocked_numbers;
   gboolean allow_callback;
-  int callback_timeout;
+  guint64 callback_timeout;
   char **match_list;
 };
 
@@ -122,11 +122,11 @@ aspam_settings_get_callback_timeout (ASpamSettings *self)
 
 void
 aspam_settings_set_callback_timeout (ASpamSettings *self,
-                                     int timeout)
+                                     guint64 timeout)
 {
   g_assert (ASPAM_IS_SETTINGS (self));
   self->callback_timeout = timeout;
-  g_settings_set_int (self->app_settings, "callback-timeout", self->callback_timeout);
+  g_settings_set_uint64 (self->app_settings, "callback-timeout", self->callback_timeout);
   g_settings_apply (self->app_settings);
 }
 
@@ -253,7 +253,7 @@ aspam_settings_init (ASpamSettings *self)
   self->enable_aspamclient = g_settings_get_boolean (self->app_settings, "enable");
   self->allow_blocked_numbers = g_settings_get_boolean (self->app_settings, "allow-blocked-numbers");
   self->allow_callback = g_settings_get_boolean (self->app_settings, "allow-callback");
-  self->callback_timeout = g_settings_get_int (self->app_settings, "callback-timeout");
+  self->callback_timeout = g_settings_get_uint64 (self->app_settings, "callback-timeout");
 
 
   if (!g_str_equal (version, PACKAGE_VERSION))
