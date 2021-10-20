@@ -30,6 +30,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <handy.h>
 
 #include "aspam-window.h"
 #include "aspam-log.h"

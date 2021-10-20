@@ -30,6 +30,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <handy.h>
 
 #include "aspam-window.h"
 #include "aspam-application.h"
@@ -47,8 +48,12 @@ struct _ASpamApplication
 {
   GtkApplication  parent_instance;
 
-  ASpamSettings *settings;
-  ASpamClient *client;
+  gboolean        daemon;
+  gboolean        daemon_running;
+  GtkWindow      *main_window;
+
+  ASpamSettings  *settings;
+  ASpamClient    *client;
 };
 
 G_DEFINE_TYPE (ASpamApplication, aspam_application, GTK_TYPE_APPLICATION)
@@ -68,6 +73,11 @@ static GOptionEntry cmd_options[] = {
   {
     "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, cmd_verbose_cb,
     N_("Show verbose logs"), NULL
+  },
+  {
+    "daemon", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, NULL,
+    N_("Whether to present the main window on startup"),
+    NULL
   },
   {
     "version", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, NULL,
@@ -105,10 +115,22 @@ static int
 aspam_application_handle_local_options (GApplication *application,
                                       GVariantDict *options)
 {
+  ASpamApplication *self = (ASpamApplication *)application;
   if (g_variant_dict_contains (options, "version"))
     {
       g_print ("%s %s\n", PACKAGE_NAME, PACKAGE_VCS_VERSION);
       return 0;
+    }
+
+  self->daemon = FALSE;
+  if (g_variant_dict_contains (options, "daemon"))
+    {
+      /* Hold application only the first time daemon mode is set */
+      if (!self->daemon)
+        g_application_hold (application);
+
+      self->daemon = TRUE;
+      g_debug ("Application marked as daemon");
     }
 
   return -1;
@@ -150,6 +172,8 @@ aspam_application_startup (GApplication *application)
 
   G_APPLICATION_CLASS (aspam_application_parent_class)->startup (application);
 
+  hdy_init ();
+
   aspam_application_add_actions (self);
   g_set_application_name (_("Anti-Spam"));
   gtk_window_set_default_icon_name (PACKAGE_ID);
@@ -190,18 +214,39 @@ aspam_application_command_line (GApplication            *application,
   return 0;
 }
 
+gboolean
+on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  ASpamApplication *self = (ASpamApplication *)data;
+  gboolean hide_on_del = FALSE;
+
+  /* If we are not running in daemon mode, hide the window and reset speaker button */
+  if (self->daemon) {
+    hide_on_del = gtk_widget_hide_on_delete (widget);
+  }
+
+  return hide_on_del;
+}
+
 static void
 aspam_application_activate (GApplication *application)
 {
   ASpamApplication *self = (ASpamApplication *)application;
-  GtkWindow *window;
 
-  window = gtk_application_get_active_window (GTK_APPLICATION (self));
+  if (!self->main_window) {
+    self->main_window = GTK_WINDOW (aspam_window_new (GTK_APPLICATION (self), self->settings));
+    g_object_add_weak_pointer (G_OBJECT (self->main_window), (gpointer *)&self->main_window);
 
-  if (window == NULL)
-    window = GTK_WINDOW (aspam_window_new (GTK_APPLICATION (self), self->settings));
+    g_signal_connect(G_OBJECT(self->main_window),
+        "delete-event", G_CALLBACK(on_widget_deleted), application);
+  }
 
-  gtk_window_present (window);
+  if ((!self->daemon && !self->daemon_running) || (self->daemon_running)) {
+    self->main_window = gtk_application_get_active_window (GTK_APPLICATION (self));
+    gtk_window_present (GTK_WINDOW (self->main_window));
+  } else {
+    self->daemon_running = TRUE;
+  }
 }
 
 static void

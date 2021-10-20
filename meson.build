@@ -1,6 +1,6 @@
 project(
   'phosh-antispam', 'c',
-  version: '0.0.1',
+  version: '1.2~alpha',
   meson_version: '>= 0.50.0',
   license: 'GPL3+',
   default_options: [
@@ -106,6 +106,7 @@ endif
 pkg_dep = [
   dependency('glib-2.0', version: '>= 2.44.0'),
   dependency('gtk+-3.0', version: '>= 3.22.0'),
+  dependency('libhandy-1', version: '>= 1.0.0')
 ]
 
 subdir('src')
