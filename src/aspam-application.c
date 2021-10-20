@@ -34,6 +34,7 @@
 #include "aspam-window.h"
 #include "aspam-application.h"
 #include "aspam-log.h"
+#include "aspam-client.h"
 
 /**
  * SECTION: aspam-application
@@ -47,6 +48,7 @@ struct _ASpamApplication
   GtkApplication  parent_instance;
 
   ASpamSettings *settings;
+  ASpamClient *client;
 };
 
 G_DEFINE_TYPE (ASpamApplication, aspam_application, GTK_TYPE_APPLICATION)
@@ -153,6 +155,7 @@ aspam_application_startup (GApplication *application)
   gtk_window_set_default_icon_name (PACKAGE_ID);
 
   self->settings = aspam_settings_new ();
+  self->client = aspam_client_get_default ();
   css_provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (css_provider,
                                        "/org/kop316/antispam/css/gtk.css");

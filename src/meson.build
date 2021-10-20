@@ -18,6 +18,7 @@ libsrc = [
   'aspam-utils.c',
   'aspam-settings.c',
   'aspam-window.c',
+  'aspam-client.c'
 ]
 
 libantispam = both_libraries(
