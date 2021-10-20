@@ -247,6 +247,8 @@ aspam_settings_init (ASpamSettings *self)
     self->match_list = g_strsplit (contents, ",", -1);
   }
 
+  /* TODO: fill out GtkListBox here with the match_list */
+
   self->app_settings = g_settings_new (PACKAGE_ID);
   version = g_settings_get_string (self->app_settings, "version");
 
