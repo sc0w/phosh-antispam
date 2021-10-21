@@ -37,10 +37,7 @@ struct _ASpamClient
   unsigned int      calls_phone_signal_added_id;
   unsigned int      calls_phone_signal_removed_id;
 
-  /* Settings */
-  int callback_timeout;
   char *allow_callback_number;
-  char **match_allow;
 };
 
 static gboolean
