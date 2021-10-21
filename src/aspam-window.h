@@ -36,5 +36,6 @@ G_DECLARE_FINAL_TYPE (ASpamWindow, aspam_window, ASPAM, WINDOW, GtkApplicationWi
 
 GtkWidget *aspam_window_new (GtkApplication *application,
                            ASpamSettings    *settings);
+void       aspam_window_reset (ASpamWindow *self);
 
 G_END_DECLS

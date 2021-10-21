@@ -223,6 +223,8 @@ on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
   /* If we are not running in daemon mode, hide the window and reset speaker button */
   if (self->daemon) {
     hide_on_del = gtk_widget_hide_on_delete (widget);
+    aspam_window_reset (ASPAM_WINDOW (widget));
+
   }
 
   return hide_on_del;

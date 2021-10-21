@@ -220,8 +220,28 @@ new_whitelist_button_clicked_cb (ASpamWindow *self)
   gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
 }
 
+void
+aspam_window_reset (ASpamWindow *self)
+{
+  g_autofree char *callback_timeout_string = NULL;
+  ASpamSettings *settings;
+  guint64 callback_timeout;
+  g_assert (ASPAM_IS_WINDOW (self));
+  /* Reset the window if this is a daemon */
+
+  settings = aspam_settings_get_default ();
+  callback_timeout = aspam_settings_get_callback_timeout (settings);
+  callback_timeout_string = g_strdup_printf("%li", callback_timeout);
+
+  gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
+  gtk_entry_set_text (GTK_ENTRY (self->callback_timeout_text),
+                      callback_timeout_string);
+  hdy_expander_row_set_expanded (HDY_EXPANDER_ROW (self->new_whitelist),
+                                 FALSE);
 
 
+
+}
 
 static void
 aspam_window_show_about (ASpamWindow *self)
