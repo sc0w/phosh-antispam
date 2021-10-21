@@ -197,6 +197,7 @@ call_added_cb (GDBusConnection *connection,
     } else {
       g_warning ("Contact Marked as spam");
       hang_up_call (self, interface, objectpath, id, FALSE);
+      return;
     }
   }
 
