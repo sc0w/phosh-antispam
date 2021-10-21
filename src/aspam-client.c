@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "aspam-client"
+
 #include "aspam-client.h"
+#include "aspam-settings.h"
 
 #define SETTING_NAME     "gnome_calls_spam_options"
 #define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
@@ -35,9 +38,6 @@ struct _ASpamClient
   unsigned int      calls_phone_signal_removed_id;
 
   /* Settings */
-  gboolean enable_aspamclient;
-  gboolean allow_blocked_numbers;
-  gboolean allow_callback;
   int callback_timeout;
   char *allow_callback_number;
   char **match_allow;
@@ -48,8 +48,7 @@ aspamclient_remove_callback_number (gpointer user_data)
 {
   ASpamClient *self = user_data;
   g_debug("Removing callback number");
-  g_free(self->allow_callback_number);
-  self->allow_callback_number = NULL;
+  g_clear_pointer(&self->allow_callback_number, g_free);
 
   return FALSE;
 }
@@ -97,11 +96,18 @@ hang_up_call (ASpamClient *self,
   }
 
   if (allow_callback) {
+    ASpamSettings *settings = aspam_settings_get_default ();
+    guint64 callback_timeout;
+    g_clear_pointer(&self->allow_callback_number, g_free);
+    if (!*id) {
+      g_debug ("Caller was anonymous, not allowing callback");
+      return;
+    }
     g_debug ("Allowing callback");
-    g_free(self->allow_callback_number);
     self->allow_callback_number = g_strdup(id);
+    callback_timeout = 60*aspam_settings_get_callback_timeout (settings);
     //Setting timeout to user defined timeout;
-    g_timeout_add_seconds (self->callback_timeout, aspamclient_remove_callback_number, self);
+    g_timeout_add_seconds (callback_timeout, aspamclient_remove_callback_number, self);
   } else {
     g_debug ("Not allowing callback");
   }
@@ -129,8 +135,11 @@ call_added_cb (GDBusConnection *connection,
   unsigned int match_allow_length_counter;
   guint32 state;
   GVariantDict dict;
+  ASpamSettings *settings;
+  char **match_allow;
 
   g_debug ("Call Added!");
+  settings = aspam_settings_get_default ();
   g_variant_get (parameters, "(o@a{?*})", &objectpath, &properties_container);
   properties = g_variant_get_child_value (properties_container, 0);
   interface_variant = g_variant_get_child_value (properties, 0);
@@ -149,7 +158,7 @@ call_added_cb (GDBusConnection *connection,
   g_variant_unref (interface_variant);
   g_variant_unref (dict_variant);
 
-  if (!self->enable_aspamclient) {
+  if (!aspam_settings_get_enable_aspamclient (settings)) {
     g_debug ("Spam filtering is disabled!");
     return;
   }
@@ -167,40 +176,41 @@ call_added_cb (GDBusConnection *connection,
     return;
   }
 
-
-  if (g_strcmp0 (id, self->allow_callback_number) == 0) {
-    g_debug ("Number calling back, allowing");
-    return;
-  }
   if (strlen(displayname) > 0) {
     g_autofree char *spam_test = NULL;
     spam_test = g_utf8_strdown (displayname, -1);
     if (g_strcmp0 (spam_test, "spam") != 0) {
-      g_debug ("Display name is not blank, not marked as spam");
       return;
     } else {
       g_warning ("Contact Marked as spam");
       hang_up_call (self, interface, objectpath, id, FALSE);
     }
   }
-  match_allow_length = g_strv_length (self->match_allow);
+
+  if (g_strcmp0 (id, self->allow_callback_number) == 0) {
+    g_debug ("Number calling back, allowing");
+    return;
+  }
+
+  match_allow = aspam_settings_get_match_list (settings);
+  match_allow_length = g_strv_length (match_allow);
   for (match_allow_length_counter = 0; match_allow_length_counter < match_allow_length; match_allow_length_counter++) {
-    if (strstr(id, self->match_allow[match_allow_length_counter]) != NULL) {
-       g_debug ("Number is allowed to call");
+    if (strstr(id, match_allow[match_allow_length_counter]) != NULL) {
+       g_debug ("Number is allowed to call, matches pattern %s", match_allow[match_allow_length_counter]);
        return;
     }
   }
   g_warning ("Number does not match allowed list");
   if (!(strlen(id) > 0)) {
     g_debug("Id is blank, this is a blocked number");
-    if (self->allow_blocked_numbers) {
+    if (aspam_settings_get_allow_blocked_numbers (settings)) {
       g_debug ("Allowing blocked number");
       return;
     } else {
       g_warning ("Not allowing blocked number");
     }
   }
-  hang_up_call (self, interface, objectpath, id, self->allow_callback);
+  hang_up_call (self, interface, objectpath, id, aspam_settings_get_allow_callback (settings));
 
 }
 
@@ -309,153 +319,6 @@ calls_vanished_cb (GDBusConnection *connection,
 
 }
 
-static char
-*aspam_client_get_settings_path (void)
-{
-  const char *homedir;
-
-  homedir = g_get_home_dir();
-  if (homedir == NULL)
-    return NULL;
-
-  return g_strdup_printf("%s/.config/%s", homedir, SETTING_NAME);
-}
-
-static void
-aspam_client_load_settings (ASpamClient *self)
-{
-  g_debug("Loading settings");
-  GKeyFile *keyfile;
-  g_autofree char *match_list;
-  g_autofree char *settings_path;
-  g_autoptr(GError) error = NULL;
-  g_autofree char *data;
-  gsize length = 0;
-
-  /* This is an ephemeral setting, do not load from anywhere */
-  self->allow_callback_number = NULL;
-
-  settings_path = aspam_client_get_settings_path ();
-  g_debug ("Settings Path: %s", settings_path);
-
-  keyfile = g_key_file_new ();
-  g_key_file_load_from_file (keyfile, settings_path, 0, &error);
-  if(error) {
-    g_warning ("Error loading keyfile: %s", error->message);
-    error = NULL;
-  }
-
-  self->enable_aspamclient = g_key_file_get_boolean(keyfile,
-                                                SETTINGS_GROUP_SPAM_BLOCK,
-                                                "EnableASpamClient",
-                                                &error);
-  if(error) {
-    g_warning ("Enable ASpamClient was not configured! Setting to TRUE.");
-    self->enable_aspamclient = TRUE;
-
-    g_key_file_set_boolean(keyfile,
-                           SETTINGS_GROUP_SPAM_BLOCK,
-                           "EnableASpamClient",
-                           self->enable_aspamclient);
-
-    error = NULL;
-  }
-
-  self->allow_blocked_numbers = g_key_file_get_boolean(keyfile,
-                                             SETTINGS_GROUP_SPAM_BLOCK,
-                                             "AllowBlockedNumbers",
-                                             &error);
-  if(error) {
-    g_warning ("Allow Blocked Numbers was not configured! Setting to FALSE.");
-    self->allow_blocked_numbers = FALSE;
-
-    g_key_file_set_boolean(keyfile,
-                           SETTINGS_GROUP_SPAM_BLOCK,
-                           "AllowBlockedNumbers",
-                           self->allow_blocked_numbers);
-
-    error = NULL;
-  }
-
-  self->allow_callback = g_key_file_get_boolean(keyfile,
-                                                SETTINGS_GROUP_SPAM_BLOCK,
-                                                "AllowCallback",
-                                                &error);
-  if(error) {
-    g_warning ("Allow Callback was not configured! Setting to TRUE.");
-    self->allow_callback = TRUE;
-
-    g_key_file_set_boolean(keyfile,
-                           SETTINGS_GROUP_SPAM_BLOCK,
-                           "AllowCallback",
-                           self->allow_callback);
-
-    error = NULL;
-  }
-
-  self->callback_timeout = g_key_file_get_integer(keyfile,
-                                                  SETTINGS_GROUP_SPAM_BLOCK,
-                                                  "CallbackTimeout",
-                                                  &error);
-  if(error) {
-    g_warning ("Callback Timeout was not configured! Setting to 10 seconds.");
-    self->callback_timeout = 10;
-
-    g_key_file_set_integer(keyfile,
-                           SETTINGS_GROUP_SPAM_BLOCK,
-                           "CallbackTimeout",
-                           self->callback_timeout);
-
-    error = NULL;
-  }
-
-  self->enable_aspamclient = g_key_file_get_boolean(keyfile,
-                                                SETTINGS_GROUP_SPAM_BLOCK,
-                                                "EnableASpamClient",
-                                                &error);
-  if(error) {
-    g_warning ("Enable ASpamClient was not configured! Setting to TRUE.");
-    self->enable_aspamclient = TRUE;
-
-    g_key_file_set_boolean(keyfile,
-                           SETTINGS_GROUP_SPAM_BLOCK,
-                           "EnableASpamClient",
-                           self->enable_aspamclient);
-
-    error = NULL;
-  }
-
-  match_list = g_key_file_get_string(keyfile,
-                                     SETTINGS_GROUP_SPAM_BLOCK,
-                                     "Matchlist",
-                                     &error);
-  if(error) {
-    g_warning ("Allow Callback was not configured! Setting to TRUE.");
-    match_list = g_strdup("NULL");
-
-    g_key_file_set_string(keyfile,
-                          SETTINGS_GROUP_SPAM_BLOCK,
-                          "Matchlist",
-                          match_list);
-
-    error = NULL;
-  }
-
-  data = g_key_file_to_data(keyfile, &length, NULL);
-  g_file_set_contents(settings_path, data, length, NULL);
-  g_key_file_free(keyfile);
-
-  self->match_allow = g_strsplit (match_list, ",", -1);
-
-  g_debug ("Enable ASpamClient set to %d", self->enable_aspamclient);
-  g_debug ("Allow blocked numbers set to %d", self->allow_blocked_numbers);
-  g_debug ("Allow call back set to %d", self->allow_callback);
-  g_debug ("Callback Timeout set to %d seconds", self->callback_timeout);
-  g_debug ("Comma Seperated match allow list: %s", match_list);
-
-
-}
-
 G_DEFINE_TYPE (ASpamClient, aspam_client, G_TYPE_OBJECT)
 
 static void
@@ -472,13 +335,7 @@ aspam_client_finalize (GObject *object)
 {
   ASpamClient *self = (ASpamClient *)object;
 
-  if (self->enable_aspamclient) {
-    calls_vanished_cb (NULL, NULL, object);
-    g_bus_unwatch_name (self->calls_watch_id);
-  }
-
-  g_strfreev (self->match_allow);
-  g_free (self->allow_callback_number);
+  g_clear_pointer(&self->allow_callback_number, g_free);
 
   G_OBJECT_CLASS (aspam_client_parent_class)->finalize (object);
 }
@@ -505,9 +362,6 @@ aspam_client_get_default (void)
   if (!self) {
     self = g_object_new (SPAM_TYPE_SPAMD, NULL);
     g_object_add_weak_pointer (G_OBJECT (self), (gpointer *)&self);
-
-    aspam_client_load_settings (self);
-
 
     self->calls_watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                              CALLS_SERVICE,

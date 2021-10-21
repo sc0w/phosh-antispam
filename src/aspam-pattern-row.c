@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "aspam-pattern-row"
+
 #include "aspam-pattern-row.h"
 #include "aspam-settings.h"
 
