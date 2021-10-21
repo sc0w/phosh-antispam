@@ -1,9 +1,14 @@
-vvmplayer (0.2~alpha)
+phosh-antispam (2.0~alpha)
 
   [ Chris Talbot ]
   * Rebase for a GUI
 
-vvmplayer (0.1)
+phosh-antispam (1.1)
+
+  [ Chris Talbot ]
+  * Bug Fixes
+
+phosh-antispam (1.0)
 
   [ Chris Talbot ]
   * Initial Release
