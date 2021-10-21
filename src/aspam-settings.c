@@ -51,11 +51,31 @@ struct _ASpamSettings
   gboolean enable_aspamclient;
   gboolean allow_blocked_numbers;
   gboolean allow_callback;
+  gboolean silence;
   guint64 callback_timeout;
   char **match_list;
 };
 
 G_DEFINE_TYPE (ASpamSettings, aspam_settings, G_TYPE_OBJECT)
+
+gboolean
+aspam_settings_get_silence (ASpamSettings *self)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  return self->silence;
+}
+
+void
+aspam_settings_set_silence (ASpamSettings *self,
+                            gboolean enable)
+{
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  self->silence = enable;
+  g_settings_set_boolean (self->app_settings, "silence", self->silence);
+  g_settings_apply (self->app_settings);
+}
 
 gboolean
 aspam_settings_get_enable_aspamclient (ASpamSettings *self)
@@ -256,7 +276,7 @@ aspam_settings_init (ASpamSettings *self)
   self->allow_blocked_numbers = g_settings_get_boolean (self->app_settings, "allow-blocked-numbers");
   self->allow_callback = g_settings_get_boolean (self->app_settings, "allow-callback");
   self->callback_timeout = g_settings_get_uint64 (self->app_settings, "callback-timeout");
-
+  self->silence = g_settings_get_boolean (self->app_settings, "silence");
 
   if (!g_str_equal (version, PACKAGE_VERSION))
     self->first_run = TRUE;

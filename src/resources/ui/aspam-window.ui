@@ -34,6 +34,25 @@
                 </child>
               </object>
             </child>
+
+            <child>
+              <object class="HdyActionRow">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="title" translatable="yes">Silence Instead of Hangup</property>
+                <property name="subtitle" translatable="yes">Silence phone call instead of hanging up</property>
+                <property name="use-underline">True</property>
+                <child>
+                  <object class="GtkSwitch" id="silence_switch">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                    <signal name="state-set" handler="silence_switch_flipped_cb" swapped="yes"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+
           </object>
         </child>
 

@@ -58,4 +58,7 @@ void         aspam_settings_set_callback_timeout (ASpamSettings *self,
 const char **aspam_settings_get_match_list (ASpamSettings *self);
 void         aspam_settings_set_match_list (ASpamSettings *self,
                                             char **match_list);
+gboolean     aspam_settings_get_silence (ASpamSettings *self);
+void         aspam_settings_set_silence (ASpamSettings *self,
+                                         gboolean enable);
 G_END_DECLS

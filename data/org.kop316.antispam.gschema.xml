@@ -44,5 +44,11 @@
       <description>Allow a caller without a number.</description>
     </key>
 
+    <key name="silence" type="b">
+      <default>false</default>
+      <summary>Silence instead of hangup</summary>
+      <description>Silence the phone call instead of hanging up.</description>
+    </key>
+
   </schema>
 </schemalist>

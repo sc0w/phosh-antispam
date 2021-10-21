@@ -43,6 +43,7 @@ struct _ASpamWindow
 
   GtkWidget   *menu_button;
   GtkWidget   *enable_aspam_switch;
+  GtkWidget   *silence_switch;
   GtkWidget   *allow_callback_switch;
   GtkWidget   *callback_timeout_text;
   GtkWidget   *callback_timeout_button;
@@ -78,6 +79,8 @@ aspam_window_window_populate (ASpamWindow *self)
                          aspam_settings_get_allow_callback (settings));
   gtk_switch_set_active (GTK_SWITCH (self->allow_blocked_numbers_switch),
                          aspam_settings_get_allow_blocked_numbers (settings));
+  gtk_switch_set_active (GTK_SWITCH (self->silence_switch),
+                         aspam_settings_get_silence (settings));
 
   gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
   callback_timeout = aspam_settings_get_callback_timeout (settings);
@@ -97,6 +100,18 @@ enable_aspam_switch_flipped_cb (ASpamWindow *self)
   settings = aspam_settings_get_default ();
   enable_aspam = gtk_switch_get_active (GTK_SWITCH (self->enable_aspam_switch));
   aspam_settings_set_enable_aspamclient (settings, enable_aspam);
+}
+
+static void
+silence_switch_flipped_cb (ASpamWindow *self)
+{
+  ASpamSettings *settings;
+  gboolean enable_silence;
+
+  g_assert (ASPAM_IS_WINDOW (self));
+  settings = aspam_settings_get_default ();
+  enable_silence = gtk_switch_get_active (GTK_SWITCH (self->silence_switch));
+  aspam_settings_set_silence (settings, enable_silence);
 }
 
 static void
@@ -294,6 +309,7 @@ aspam_window_class_init (ASpamWindowClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, menu_button);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, enable_aspam_switch);
+  gtk_widget_class_bind_template_child (widget_class, ASpamWindow, silence_switch);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, allow_callback_switch);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_text);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_button);
@@ -304,6 +320,7 @@ aspam_window_class_init (ASpamWindowClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, aspam_window_show_about);
   gtk_widget_class_bind_template_callback (widget_class, allow_callback_switch_flipped_cb);
+  gtk_widget_class_bind_template_callback (widget_class, silence_switch_flipped_cb);
   gtk_widget_class_bind_template_callback (widget_class, callback_timeout_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, new_whitelist_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, enable_aspam_switch_flipped_cb);
