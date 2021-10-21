@@ -48,8 +48,8 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main window</caption>
-      <image width="764" height="524">
-        https://gitlab.com/kop316/phosh-antispam/raw/master/data/metainfo/01-window.png
+      <image width="720" height="1440">
+        https://gitlab.com/kop316/phosh-antispam/-/raw/master/data/metainfo/screenshot.png?inline=false
       </image>
     </screenshot>
   </screenshots>
@@ -70,5 +70,5 @@
 
   <!-- See https://hughsie.github.io/oars/ -->
   <content_rating type="oars-1.1"/>
-  
+
 </component>
