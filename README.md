@@ -6,10 +6,14 @@ Copyright (C) 2021, Chris Talbot
 Phosh Antispam is a program that monitors Gnome calls and automatically hangs up
 depending on the user's preferences.
 
+<div align="center">
+  <img src="https://gitlab.com/kop316/phosh-antispam/-/raw/master/data/metainfo/screenshot.png?inline=false" width="300" >
+</div>
+
 By default, if the number calling you is not in your contact list, or you have the contact listed as "Spam", Phosh AntiSpam will automatically tell GNOME Calls to hang up on the call. This will send it to voicemail. There are additionally these user configuration options:
 
 - Whether to block or allow blocked numbers (also called "Anonymous Number" in GNOME Calls)
-- If the caller calls back within 10 seconds of the first (blocked) call, whether to allow it through (in case it is a human trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
+- If the caller calls back within 1 minute of the first (blocked) call, whether to allow it through (in case it is a human trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
 - If you would like to match a certain type (or types) of number (for example, an area code or a number prefix) to let them through. For example, if you want to allow the area code `201` and the number prefix `312-555-*`, you could allow both combinations (and add others as well).
 
 ## License
@@ -24,10 +28,12 @@ https://creativecommons.org/licenses/by-sa/4.0/
 In order to compile Phosh Antispam you need following software packages:
 
 - GCC compiler
-- Gio library
+- GIO library
+- Libhandy Library
 
 Phosh Antispam requires, at a minimum, GNOME Calls version `41.alpha` to work.
 If there is a version less than `41.alpha`, Phosh Antispam will not do anything.
+To use the `Silence` feature, `41.1` is needed.
 
 ## Installing Phosh Antispam
 Build tools requirements
@@ -70,34 +76,5 @@ can be invoked directly.
 
   Run with debugging
 
-    # G_MESSAGES_DEBUG=all ./_build/src/phoshspamblock
-
-## General Configuration
-You can either run Phosh Antispam and it will create a default template, or you
-can copy the following contents to `~/.config/gnome_calls_spam_options`
-
-```
-[Spam Block]
-EnableSpamBlock=true
-AllowBlockedNumbers=false
-AllowCallback=true
-CallbackTimeout=10
-Matchlist=NULL
-```
-
-IMPORTANT NOTE: If you change settings in this file, You must restart Phosh anti-spam in order for your settings to take effect!
-
-EnableSpamBlock: Whether you want to enable Spam Block. This is useful if you just want to disable Phosh Anti-Spam for a short time and then re-enable.
-
-AllowBlockedNumbers: Whether you want to allow blocked numbers through.
-
-AllowCallback: Allows a ten second timeout for a number to call again and be let through. This can be useful if it is a human calling you.  Note this does not apply to contacts named "Spam", they will always be hung up on.
-
-CallbackTimeout: Time time in seconds for how long someone can call back a second time and be let through. Default is 10 seconds.
-
-Matchlist: A comma seperated list of numbers (or partial numbers) you want to allow through. For example, if you want to allow the area code `201` and the number prefix `312-555-*` through, you would make this line:
-```
-Matchlist=201,312555
-```
-
+    # G_MESSAGES_DEBUG=all ./_build/src/phosh-antispam
 
