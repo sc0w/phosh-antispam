@@ -49,7 +49,7 @@ struct _ASpamWindow
   GtkWidget   *callback_timeout_text;
   GtkWidget   *callback_timeout_button;
   GtkWidget   *allow_blocked_numbers_switch;
-  GtkWidget   *whitelist_list_box;
+  GtkWidget   *new_whitelist;
   GtkWidget   *new_whitelist_text;
   GtkWidget   *new_whitelist_button;
 };
@@ -97,10 +97,14 @@ aspam_window_window_populate (ASpamWindow *self)
 
   for (int i = 0; i < match_list_length; i++) {
     ASpamPatternRow *new_row;
+
+    if (!*match_list[i])
+      continue;
+
     new_row = aspam_pattern_row_new ();
 
-    gtk_list_box_prepend (GTK_LIST_BOX (self->whitelist_list_box),
-                          GTK_WIDGET (new_row));
+    gtk_container_add (GTK_CONTAINER (self->new_whitelist),
+                       GTK_WIDGET (new_row));
 
     hdy_action_row_set_subtitle (HDY_ACTION_ROW (new_row),
                                  match_list[i]);
@@ -188,11 +192,11 @@ static void
 new_whitelist_button_clicked_cb (ASpamWindow *self)
 {
   g_autoptr(GError) error = NULL;
-  //ASpamSettings *settings;
+  ASpamSettings *settings;
   const char *new_pattern;
   ASpamPatternRow *new_row;
   g_assert (ASPAM_IS_WINDOW (self));
-  //settings = aspam_settings_get_default ();
+  settings = aspam_settings_get_default ();
 
   new_pattern = gtk_entry_get_text (GTK_ENTRY (self->new_whitelist_text));
 
@@ -203,13 +207,15 @@ new_whitelist_button_clicked_cb (ASpamWindow *self)
 
   new_row = aspam_pattern_row_new ();
 
-  gtk_list_box_prepend (GTK_LIST_BOX (self->whitelist_list_box),
-                        GTK_WIDGET (new_row));
+  gtk_container_add (GTK_CONTAINER (self->new_whitelist),
+                     GTK_WIDGET (new_row));
+
 
   hdy_action_row_set_subtitle (HDY_ACTION_ROW (new_row),
                                new_pattern);
 
-  //TODO: Append the new pattern
+  aspam_settings_add_match (settings,
+                            new_pattern);
 
   gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
 }
@@ -346,7 +352,7 @@ aspam_window_class_init (ASpamWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_text);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, callback_timeout_button);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, allow_blocked_numbers_switch);
-  gtk_widget_class_bind_template_child (widget_class, ASpamWindow, whitelist_list_box);
+  gtk_widget_class_bind_template_child (widget_class, ASpamWindow, new_whitelist);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, new_whitelist_text);
   gtk_widget_class_bind_template_child (widget_class, ASpamWindow, new_whitelist_button);
 

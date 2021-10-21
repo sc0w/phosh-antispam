@@ -194,6 +194,59 @@ aspam_settings_set_match_list (ASpamSettings *self,
   return;
 }
 
+void
+aspam_settings_delete_match (ASpamSettings *self,
+                             const char *match)
+{
+  g_auto(GStrv) new_match_list = NULL;
+  g_autofree char *new_csv = NULL;
+  GString *new_csv_string;
+  guint match_list_length;
+
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  match_list_length = g_strv_length (self->match_list);
+  new_csv_string = g_string_new (NULL);
+  for (int i = 0; i < match_list_length; i++) {
+    if (g_strcmp0 (self->match_list[i], match) != 0) {
+      new_csv_string = g_string_append (new_csv_string, self->match_list[i]);
+      if (i+1 != match_list_length)
+        new_csv_string = g_string_append (new_csv_string, ",");
+    }
+  }
+
+  new_csv = g_string_free (new_csv_string, FALSE);
+
+  new_match_list = g_strsplit (new_csv, ",", -1);
+  aspam_settings_set_match_list (self,
+                                 new_match_list);
+  return;
+
+}
+
+void
+aspam_settings_add_match (ASpamSettings *self,
+                          const char *match)
+{
+  g_autofree char *csv = NULL;
+  g_autofree char *new_csv = NULL;
+  g_auto(GStrv) new_match_list = NULL;
+
+  g_assert (ASPAM_IS_SETTINGS (self));
+
+  csv = g_strjoinv (",", self->match_list);
+  if (!*csv)
+    new_csv = g_strdup_printf("%s", match);
+  else
+    new_csv = g_strdup_printf("%s,%s", csv, match);
+
+  new_match_list = g_strsplit (new_csv, ",", -1);
+  aspam_settings_set_match_list (self,
+                                 new_match_list);
+  return;
+
+}
+
 static void
 aspam_settings_dispose (GObject *object)
 {
@@ -263,6 +316,10 @@ aspam_settings_init (ASpamSettings *self)
     new_match_list = g_strsplit ("", ",", -1);
     g_clear_error (&error);
   } else {
+    g_debug ("File Contents %s", contents);
+    /* Sometimes there are */
+    g_strdelimit (contents, "\r\n", ' ');
+    g_strstrip (contents);
     g_debug ("File Contents %s", contents);
     self->match_list = g_strsplit (contents, ",", -1);
   }

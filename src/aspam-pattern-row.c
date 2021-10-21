@@ -17,6 +17,7 @@
  */
 
 #include "aspam-pattern-row.h"
+#include "aspam-settings.h"
 
 struct _ASpamPatternRow
 {
@@ -28,13 +29,13 @@ G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
 static void
 delete_button_clicked_cb (ASpamPatternRow *self)
 {
-  //ASpamSettings *settings;
+  ASpamSettings *settings;
   const char *pattern;
-  //settings = aspam_settings_get_default ();
-  //TODO: delete this new pattern
+  settings = aspam_settings_get_default ();
 
   pattern = hdy_action_row_get_subtitle (HDY_ACTION_ROW (self));
-  g_debug ("Deleting %s", pattern);
+  aspam_settings_delete_match (settings,
+                               pattern);
   gtk_widget_destroy (GTK_WIDGET (self));
 }
 

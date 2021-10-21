@@ -141,31 +141,10 @@
             </child>
 
             <child>
-              <object class="GtkListBox" id="whitelist_list_box">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="expand">True</property>
-                <property name="selection-mode">none</property>
-                  <style>
-                    <class name="content"/>
-                  </style>
-              </object>
-            </child>
-
-            <child>
-              <object class="HdyActionRow" id="new_whitelist">
+              <object class="HdyExpanderRow" id="new_whitelist">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkEntry" id="new_whitelist_text">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="placeholder-text" translatable="yes">Add new whitelist pattern</property>
-                  </object>
-                </child>
-                <child>
+                <child type="prefix">
                   <object class="GtkButton" id="new_whitelist_button">
                     <property name="visible">True</property>
                     <property name="use-underline">1</property>
@@ -180,9 +159,19 @@
                     </child>
                   </object>
                 </child>
+
+                <child type="prefix">
+                  <object class="GtkEntry" id="new_whitelist_text">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="placeholder-text" translatable="yes">Add new pattern</property>
+                  </object>
+                </child>
+
               </object>
             </child>
-
           </object>
         </child>
       </object>
