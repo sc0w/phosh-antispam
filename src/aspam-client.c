@@ -88,7 +88,13 @@ hang_up_call (ASpamClient *self,
                            -1,
                            NULL,
                            &error);
-  } else {
+  }
+  if (!aspam_settings_get_silence (settings) || error) {
+    if (error) {
+      g_warning ("Error Silencing call: %s", error->message);
+      g_clear_error (&error);
+      g_warning ("Attempting to hang up instead");
+    }
     g_dbus_proxy_call_sync(hangup_proxy,
                            "Hangup",
                            NULL,
