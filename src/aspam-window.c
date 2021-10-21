@@ -34,6 +34,7 @@
 
 #include "aspam-window.h"
 #include "aspam-log.h"
+#include "aspam-pattern-row.h"
 
 struct _ASpamWindow
 {
@@ -178,6 +179,10 @@ new_whitelist_button_clicked_cb (ASpamWindow *self)
   new_pattern = gtk_entry_get_text (GTK_ENTRY (self->new_whitelist_text));
 
   g_warning ("Adding new patter not implimented: %s", new_pattern);
+
+  gtk_list_box_prepend (GTK_LIST_BOX (self->whitelist_list_box),
+                        GTK_WIDGET (aspam_pattern_row_new ()));
+
 
   gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
 }

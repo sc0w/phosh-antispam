@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/kop316/antispam">
     <file preprocess="xml-stripblanks">ui/aspam-window.ui</file>
+    <file preprocess="xml-stripblanks">ui/aspam-pattern-row.ui</file>
     <file>css/gtk.css</file>
   </gresource>
 </gresources>

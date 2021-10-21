@@ -18,7 +18,8 @@ libsrc = [
   'aspam-utils.c',
   'aspam-settings.c',
   'aspam-window.c',
-  'aspam-client.c'
+  'aspam-client.c',
+  'aspam-pattern-row.c'
 ]
 
 libantispam = both_libraries(
@@ -31,18 +32,8 @@ libantispam = both_libraries(
 ui_files = files(
   'resources/gtk/help-overlay.ui',
   'resources/ui/aspam-window.ui',
+  'resources/ui/aspam-pattern-row.ui'
 )
-
-gtk_builder_tool = find_program('gtk-builder-tool', required: false)
-if gtk_builder_tool.found()
-  # Separate multiple libraries by ‘:’ eg.: 'LD_PRELOAD=@0@:libhandy-1.so'...
-  preload_env = 'LD_PRELOAD=@0@'.format(libantispam.get_shared_lib().full_path())
-  foreach file: ui_files
-    test('Validate @0@'.format(file), gtk_builder_tool,
-         env: [preload_env],
-         args: ['validate', file])
-  endforeach
-endif
 
 src += [
   'main.c',
