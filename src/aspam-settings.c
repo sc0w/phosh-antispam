@@ -151,12 +151,12 @@ aspam_settings_set_callback_timeout (ASpamSettings *self,
 }
 
 
-const char **
+char **
 aspam_settings_get_match_list (ASpamSettings *self)
 {
   g_assert (ASPAM_IS_SETTINGS (self));
 
-  return (const char **)self->match_list;
+  return self->match_list;
 }
 
 void
@@ -266,8 +266,6 @@ aspam_settings_init (ASpamSettings *self)
     g_debug ("File Contents %s", contents);
     self->match_list = g_strsplit (contents, ",", -1);
   }
-
-  /* TODO: fill out GtkListBox here with the match_list */
 
   self->app_settings = g_settings_new (PACKAGE_ID);
   version = g_settings_get_string (self->app_settings, "version");

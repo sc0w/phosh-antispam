@@ -7,7 +7,22 @@
     <property name="visible">True</property>
     <property name="use-underline">True</property>
     <property name="activatable">True</property>
-    <property name="title" translatable="yes">_Voicemaillll</property>
+    <property name="title" translatable="yes">Whitelisted Pattern</property>
+    <child>
+      <object class="GtkButton" id="delete_button">
+        <property name="visible">True</property>
+        <property name="use-underline">1</property>
+        <property name="valign">center</property>
+        <signal name="clicked" handler="delete_button_clicked_cb" swapped="yes"/>
+        <child>
+          <object class="GtkImage" id="delete_button_button_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">window-close-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>
 

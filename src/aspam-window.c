@@ -71,6 +71,8 @@ aspam_window_window_populate (ASpamWindow *self)
   g_autofree char *callback_timeout_string = NULL;
   ASpamSettings *settings;
   guint64 callback_timeout;
+  guint match_list_length;
+  char **match_list;
   g_assert (ASPAM_IS_WINDOW (self));
   settings = aspam_settings_get_default ();
 
@@ -88,6 +90,22 @@ aspam_window_window_populate (ASpamWindow *self)
   callback_timeout_string = g_strdup_printf("%li", callback_timeout);
   gtk_entry_set_text (GTK_ENTRY (self->callback_timeout_text),
                       callback_timeout_string);
+
+  match_list = aspam_settings_get_match_list (settings);
+
+  match_list_length = g_strv_length (match_list);
+
+  for (int i = 0; i < match_list_length; i++) {
+    ASpamPatternRow *new_row;
+    new_row = aspam_pattern_row_new ();
+
+    gtk_list_box_prepend (GTK_LIST_BOX (self->whitelist_list_box),
+                          GTK_WIDGET (new_row));
+
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (new_row),
+                                 match_list[i]);
+
+  }
 }
 
 
@@ -172,17 +190,26 @@ new_whitelist_button_clicked_cb (ASpamWindow *self)
   g_autoptr(GError) error = NULL;
   //ASpamSettings *settings;
   const char *new_pattern;
-
+  ASpamPatternRow *new_row;
   g_assert (ASPAM_IS_WINDOW (self));
   //settings = aspam_settings_get_default ();
 
   new_pattern = gtk_entry_get_text (GTK_ENTRY (self->new_whitelist_text));
 
-  g_warning ("Adding new patter not implimented: %s", new_pattern);
+  if (!*new_pattern) {
+    g_debug ("Empty string");
+    return;
+  }
+
+  new_row = aspam_pattern_row_new ();
 
   gtk_list_box_prepend (GTK_LIST_BOX (self->whitelist_list_box),
-                        GTK_WIDGET (aspam_pattern_row_new ()));
+                        GTK_WIDGET (new_row));
 
+  hdy_action_row_set_subtitle (HDY_ACTION_ROW (new_row),
+                               new_pattern);
+
+  //TODO: Append the new pattern
 
   gtk_entry_set_text (GTK_ENTRY (self->new_whitelist_text), "");
 }

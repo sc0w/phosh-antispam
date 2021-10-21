@@ -26,6 +26,19 @@ struct _ASpamPatternRow
 G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
 
 static void
+delete_button_clicked_cb (ASpamPatternRow *self)
+{
+  //ASpamSettings *settings;
+  const char *pattern;
+  //settings = aspam_settings_get_default ();
+  //TODO: delete this new pattern
+
+  pattern = hdy_action_row_get_subtitle (HDY_ACTION_ROW (self));
+  g_debug ("Deleting %s", pattern);
+  gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
 aspam_pattern_row_constructed (GObject *object)
 {
   //ASpamPatternRow *self = (ASpamPatternRow *)object;
@@ -57,7 +70,7 @@ aspam_pattern_row_class_init (ASpamPatternRowClass *klass)
 
   //gtk_widget_class_bind_template_child (widget_class, ASpamPatternRow, new_whitelist_button);
 
-  //gtk_widget_class_bind_template_callback (widget_class, aspam_window_show_about);
+  gtk_widget_class_bind_template_callback (widget_class, delete_button_clicked_cb);
 
 }
 
