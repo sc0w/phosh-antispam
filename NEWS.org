@@ -1,0 +1,9 @@
+vvmplayer (0.2~alpha)
+
+  [ Chris Talbot ]
+  * Rebase for a GUI
+
+vvmplayer (0.1)
+
+  [ Chris Talbot ]
+  * Initial Release

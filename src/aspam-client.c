@@ -63,10 +63,8 @@ hang_up_call (ASpamClient *self,
 
   g_autoptr(GError) error = NULL;
   GDBusProxy *hangup_proxy;
-  g_debug ("Hanging up: Objectpath: %s, Interface: %s",
-            objectpath, interface);
+  ASpamSettings *settings = aspam_settings_get_default ();
 
-  g_debug("Making proxy");
   hangup_proxy = g_dbus_proxy_new_sync(
 		self->connection,
 		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
@@ -81,22 +79,31 @@ hang_up_call (ASpamClient *self,
     g_warning ("Error making proxy: %s\n", error->message);
     return;
   }
-  g_debug("Making proxy call");
-  g_dbus_proxy_call_sync(hangup_proxy,
-                         "Hangup",
-                         NULL,
-                         G_DBUS_CALL_FLAGS_NONE,
-                         -1,
-                         NULL,
-                         &error);
+  if (aspam_settings_get_silence (settings)) {
+    g_warning ("This requires Calls 41.1 and above!");
+    g_dbus_proxy_call_sync(hangup_proxy,
+                           "Silence",
+                           NULL,
+                           G_DBUS_CALL_FLAGS_NONE,
+                           -1,
+                           NULL,
+                           &error);
+  } else {
+    g_dbus_proxy_call_sync(hangup_proxy,
+                           "Hangup",
+                           NULL,
+                           G_DBUS_CALL_FLAGS_NONE,
+                           -1,
+                           NULL,
+                           &error);
+  }
 
   if (error != NULL) {
-    g_warning ("Error Hanging up: %s\n", error->message);
+    g_warning ("Error making proxy call: %s\n", error->message);
     return;
   }
 
   if (allow_callback) {
-    ASpamSettings *settings = aspam_settings_get_default ();
     guint64 callback_timeout;
     g_clear_pointer(&self->allow_callback_number, g_free);
     if (!*id) {
