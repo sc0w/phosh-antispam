@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Anti-Spam
+Comment=Template for GTK Applications
+Exec=@bindir@/phosh-antispam --daemon
+# Translators: Do NOT translate. This is an icon file name.
+Icon=org.kop316.antispam
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Utility;GTK;GNOME;
+# Translators: Do NOT translate the semicolon. keywords should
+# also end with a semicolon
+Keywords=Template;
+DBusActivatable=true
+# Translators: Do NOT translate NOR transliterate (these are enum types)
+X-Purism-FormFactor=Workstation;Mobile;
