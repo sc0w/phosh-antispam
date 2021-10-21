@@ -113,14 +113,6 @@ subdir('src')
 subdir('data')
 subdir('docs')
 
-if get_option('tests')
-  subdir('tests')
-endif
-
-if host_machine.system() == 'windows'
-  subdir('build-aux/w32')
-endif
-
 if get_option('po')
   subdir('po')
 endif
