@@ -1,3 +1,8 @@
+phosh-antispam (2.0~beta)
+
+  [ Chris Talbot ]
+  * Reintegrate everything into the GUI
+
 phosh-antispam (2.0~alpha)
 
   [ Chris Talbot ]
