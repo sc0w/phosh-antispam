@@ -1,0 +1,54 @@
+desktop_conf = configuration_data()
+desktop_conf.set('bindir', pkg_bindir)
+
+desktop_file = i18n.merge_file(
+  input:  configure_file(
+    input: pkg_id + '.desktop.in.in',
+    output: pkg_id + 'desktop.in',
+    configuration: desktop_conf,
+  ),
+  output: pkg_id + '.desktop',
+  type: 'desktop',
+  po_dir: pkg_po_dir,
+  install: true,
+  install_dir: join_paths(pkg_datadir, 'applications'),
+)
+
+desktop_file = i18n.merge_file(
+  input:  configure_file(
+    input: pkg_id + '-daemon.desktop.in.in',
+    output: pkg_id + '-daemondesktop.in',
+    configuration: desktop_conf,
+  ),
+  output: pkg_id + '-daemon.desktop',
+  type: 'desktop',
+  po_dir: pkg_po_dir,
+  install: true,
+  install_dir: join_paths(get_option('sysconfdir'), 'xdg/autostart')
+)
+
+
+install_data(
+  pkg_id + '.gschema.xml',
+  install_dir: pkg_schemadir,
+)
+
+if get_option('tests')
+  compiled = gnome.compile_schemas(build_by_default: true)
+endif
+
+desktop_utils = find_program('desktop-file-validate', required: false)
+if desktop_utils.found()
+  test('Validate desktop file', desktop_utils,
+       args: [desktop_file])
+endif
+
+compile_schemas = find_program('glib-compile-schemas', required: false)
+if compile_schemas.found()
+  test('Validate schema file', compile_schemas,
+       args: ['--strict', '--dry-run', meson.current_source_dir()])
+endif
+
+subdir('metainfo')
+subdir('icons')
+

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Anti-Spam
-Comment=Template for GTK Applications
+Comment=Application to block spam on GNOME Calls
 Exec=@bindir@/phosh-antispam
 # Translators: Do NOT translate. This is an icon file name.
 Icon=org.kop316.antispam
@@ -10,7 +10,6 @@ StartupNotify=true
 Categories=Utility;GTK;GNOME;
 # Translators: Do NOT translate the semicolon. keywords should
 # also end with a semicolon
-Keywords=Template;
-DBusActivatable=true
+Keywords=Utility;GTK;GNOME;
 # Translators: Do NOT translate NOR transliterate (these are enum types)
 X-Purism-FormFactor=Workstation;Mobile;
