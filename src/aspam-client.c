@@ -77,7 +77,7 @@ hang_up_call (ASpamClient *self,
     return;
   }
   if (aspam_settings_get_silence (settings)) {
-    g_warning ("This requires Calls 41.1 and above!");
+    g_warning ("Silencing a call requires Calls 41.1 and above!");
     g_dbus_proxy_call_sync(hangup_proxy,
                            "Silence",
                            NULL,
