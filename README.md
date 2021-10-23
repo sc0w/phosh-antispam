@@ -44,11 +44,14 @@ supported Meson backend is required (e.g. ninja).
 
 To prepare/configure the project for compilation:
 
-    # meson _build --sysconfdir=/etc
+    # meson _build
 
-(Note: --sysconfdir=/etc is not strictly necessary, but useful if you want
-to install Phosh Antispam so the xdg autostart desktop file will install in
-the correct place).
+However, if you want to install it, run
+
+    # meson _build -Dprefix=/usr --sysconfdir=/etc
+
+`--sysconfdir=/etc` will install the autostart file in the correct place, and
+`-Dprefix=/usr` installs `phosh-antispam` in `/usr/bin/` rather than `/usr/local/bin`
 
 To build the project:
 
