@@ -1,3 +1,10 @@
+phosh-antispam (2.0)
+
+  [ Chris Talbot ]
+  * Clean up GUI
+  * Ensure hang up is used as backup
+  * Always hang up on "Spam" contact
+
 phosh-antispam (2.0~beta)
 
   [ Chris Talbot ]
