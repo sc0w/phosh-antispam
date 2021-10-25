@@ -1,0 +1,46 @@
+---
+.only-default: &only-default
+  only:
+    - master
+    - merge_requests
+    - tags
+
+build-debian:
+  image: debian:bookworm
+  <<: *only-default
+  before_script:
+    - apt update
+    - apt install -y
+        debhelper-compat
+        meson
+        libgtk-3-dev
+        libhandy-1-dev
+        xvfb
+  script:
+    - meson -Dwerror=true _build
+    - meson compile -C _build
+    - xvfb-run meson test -C _build --print-errorlogs
+  artifacts:
+    paths:
+      - _build/
+
+build-alpine:
+  image: alpine:edge
+  <<: *only-default
+  before_script:
+    - apk -q add
+        build-base
+        glib-dev
+        libhandy1-dev
+        meson
+        xvfb-run
+  script:
+    # check for uninitialized g_autoptr, which cause segfaults in musl
+    - grep -n -e 'g_autoptr(\w*)\s*\w*;' -R . && exit 1
+    - meson -Dwerror=true _build
+    - meson compile -C _build
+    - xvfb-run meson test -C _build --print-errorlogs
+  artifacts:
+    paths:
+      - _build/
+
