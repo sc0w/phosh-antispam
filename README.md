@@ -15,6 +15,9 @@ By default, if the number calling you is not in your contact list, or you have t
 - Whether to block or allow blocked numbers (also called "Anonymous Number" in GNOME Calls)
 - If the caller calls back within 1 minute of the first (blocked) call, whether to allow it through (in case it is a human trying to call back). Note this does not apply to contacts named "Spam", they will always be hung up on.
 - If you would like to match a certain type (or types) of number (for example, an area code or a number prefix) to let them through. For example, if you want to allow the area code `201` and the number prefix `312-555-*`, you could allow both combinations (and add others as well).
+- GNOME Calls has all of the numbers to compare in the E.164 format.
+- The whitelist for numbers is located in a csv in `$XDG_CONFIG_DIR/phoshantispam/whitelist.csv` (`$HOME/.config/phoshantispam/whitelist.csv` in most cases). On start up, `phosh-antispam` loads all of the whitelist values from this file (and saves to it if the list changes in the program). If one does not exist, `phosh-antispam` will create a file there on first run.
+
 
 ## License
 Unless otherwise specified, all code is licensed under the GPL Version 3 or later
