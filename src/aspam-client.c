@@ -77,7 +77,7 @@ hang_up_call (ASpamClient *self,
     return;
   }
   if (aspam_settings_get_silence (settings)) {
-    g_warning ("Silencing a call requires Calls 41.1 and above!");
+    g_debug ("Silencing call.");
     g_dbus_proxy_call_sync(hangup_proxy,
                            "Silence",
                            NULL,
@@ -92,6 +92,7 @@ hang_up_call (ASpamClient *self,
       g_clear_error (&error);
       g_warning ("Attempting to hang up instead");
     }
+    g_debug ("Hanging up call.");
     g_dbus_proxy_call_sync(hangup_proxy,
                            "Hangup",
                            NULL,
@@ -190,6 +191,7 @@ call_added_cb (GDBusConnection *connection,
     g_autofree char *spam_test = NULL;
     spam_test = g_utf8_strdown (displayname, -1);
     if (g_strcmp0 (spam_test, "spam") != 0) {
+      g_debug ("This is a contact, allowing");
       return;
     } else {
       g_warning ("Contact Marked as spam");
@@ -222,7 +224,6 @@ call_added_cb (GDBusConnection *connection,
     }
   }
   hang_up_call (self, interface, objectpath, id, aspam_settings_get_allow_callback (settings));
-
 }
 
 static void
