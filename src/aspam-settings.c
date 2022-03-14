@@ -312,8 +312,6 @@ aspam_settings_init (ASpamSettings *self)
     g_clear_error (&error);
   } else if (error) {
     g_warning ("Error loading CSV File: %s. Making a blank one.", error->message);
-    g_auto(GStrv) new_match_list = NULL;
-    new_match_list = g_strsplit ("", ",", -1);
     g_clear_error (&error);
   } else {
     g_debug ("File Contents %s", contents);
