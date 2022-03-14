@@ -1,0 +1,9 @@
+aspam-client: Fix [-Wunused-macros] warnings
+
+Fixes the warnings:
+../src/aspam-client.c:25: warning: macro "SETTINGS_GROUP_SPAM_BLOCK" is not used [-Wunused-macros]
+   25 | #define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
+      |
+../src/aspam-client.c:24: warning: macro "SETTING_NAME" is not used [-Wunused-macros]
+   24 | #define SETTING_NAME     "gnome_calls_spam_options"
+      |

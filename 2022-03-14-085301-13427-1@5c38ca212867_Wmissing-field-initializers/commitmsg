@@ -1,0 +1,6 @@
+aspam-application: Fix [-Wmissing-field-initializers] warning
+
+Fixes the warning:
+../src/aspam-application.c:143:5: warning: missing initializer for field 'parameter_type' of 'GActionEntry' {aka 'const struct _GActionEntry'} [-Wmissing-field-initializers]
+  143 |     { help, aspam_application_show_help },
+      |     ^

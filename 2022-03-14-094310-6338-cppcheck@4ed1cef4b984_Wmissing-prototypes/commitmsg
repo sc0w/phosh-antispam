@@ -1,0 +1,11 @@
+Fix [-Wmissing-prototypes] warnings
+
+Fixes the warnings:
+
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~

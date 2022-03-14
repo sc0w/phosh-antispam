@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>phosh-antispam Code Analyzer results</title>
+</head>
+<body>
+<h1>
+  <a href="https://github.com/sc0w">sc0w</a>/<a href="https://github.com/sc0w/phosh-antispam">phosh-antispam</a> Static analyzer results
+</h1>
+  <a href="https://github.com/sc0w/phosh-antispam" title="Github"><i class="fa fa-github fa-2x"></i>GitHub</a>
+  <a href="" title="Travis CI"><img src="https://travis-ci.org/sc0w/phosh-antispam.svg?branch=master" alt="Build Status" /></a>
+<hr/>
+Commit: <a href="https://github.com/sc0w/phosh-antispam/commit/cb22b69a4771f72e0f22cf174c650aec87152ae7">cb22b69a4771f72e0f22cf174c650aec87152ae7</a><br/>
+Compare: <a href="https://github.com/sc0w/phosh-antispam/compare/"></a><br/>
+Branch: <a href="https://github.com/sc0w/phosh-antispam/tree/Wunused-macros">Wunused-macros</a><br/>
+Time: 2022-03-14 10:15:02+00:00<br/>
+Messages:<br/>
+<pre>
+aspam-client: Fix [-Wunused-macros] warnings
+
+Fixes the warnings:
+../src/aspam-client.c:25: warning: macro "SETTINGS_GROUP_SPAM_BLOCK" is not used [-Wunused-macros]
+   25 | #define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
+      |
+../src/aspam-client.c:24: warning: macro "SETTING_NAME" is not used [-Wunused-macros]
+   24 | #define SETTING_NAME     "gnome_calls_spam_options"
+      |
+</pre>
+<a href="https://sc0w.github.io/phosh-antispam/output_cb22b69a4771f72e0f22cf174c650aec87152ae7">Logs</a><br/>
+<br/>
+Warnings: 33<br/>
+<hr/>
+<ul>
+<li><a href="2022-03-14-101502-1440-cppcheck@cb22b69a4771_Wunused-macros">2022-03-14-101502-1440-cppcheck@cb22b69a4771_Wunused-macros</a></li>
+<li><a href="2022-03-14-101455-13423-1@cb22b69a4771_Wunused-macros">2022-03-14-101455-13423-1@cb22b69a4771_Wunused-macros</a></li>
+<li><a href=2022-03-14-100116-1413-cppcheck@ab7632223e14_Wmissing-prototypes title="Fix [-Wmissing-prototypes] warnings
+
+Fixes the warnings:
+
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~">2022-03-14-100116-1413-cppcheck@ab7632223e14_Wmissing-prototypes</a> <a href="2022-03-14-100116-1413-cppcheck@ab7632223e14_Wmissing-prototypes/output_ab7632223e14f8ed516ba0776d8fda36da12cbc4">logs</a> 33</li>
+<li><a href=2022-03-14-100108-13424-1@ab7632223e14_Wmissing-prototypes title="Fix [-Wmissing-prototypes] warnings
+
+Fixes the warnings:
+
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~">2022-03-14-100108-13424-1@ab7632223e14_Wmissing-prototypes</a> <a href="2022-03-14-100108-13424-1@ab7632223e14_Wmissing-prototypes/output_ab7632223e14f8ed516ba0776d8fda36da12cbc4">logs</a> 33</li>
+<li><a href=2022-03-14-094310-6338-cppcheck@4ed1cef4b984_Wmissing-prototypes title="Fix [-Wmissing-prototypes] warnings
+
+Fixes the warnings:
+
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~">2022-03-14-094310-6338-cppcheck@4ed1cef4b984_Wmissing-prototypes</a> <a href="2022-03-14-094310-6338-cppcheck@4ed1cef4b984_Wmissing-prototypes/output_4ed1cef4b9841787f62e3b2baf48ba93c1c7edb5">logs</a> 35</li>
+<li><a href=2022-03-14-094304-13426-1@4ed1cef4b984_Wmissing-prototypes title="Fix [-Wmissing-prototypes] warnings
+
+Fixes the warnings:
+
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~">2022-03-14-094304-13426-1@4ed1cef4b984_Wmissing-prototypes</a> <a href="2022-03-14-094304-13426-1@4ed1cef4b984_Wmissing-prototypes/output_4ed1cef4b9841787f62e3b2baf48ba93c1c7edb5">logs</a> 35</li>
+<li><a href=2022-03-14-092022-8426-cppcheck@2e91cb4450b9_Wsign-compare title="Fix [-Wsign-compare] warnings
+
+Fixes the warnings:
+
+../src/aspam-settings.c: In function 'aspam_settings_delete_match':
+../src/aspam-settings.c:210:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  210 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^
+../src/aspam-settings.c:213:15: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  213 |       if (i+1 != match_list_length)
+      |               ^~
+
+../src/aspam-window.c: In function 'aspam_window_window_populate':
+../src/aspam-window.c:98:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+   98 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^">2022-03-14-092022-8426-cppcheck@2e91cb4450b9_Wsign-compare</a> <a href="2022-03-14-092022-8426-cppcheck@2e91cb4450b9_Wsign-compare/output_2e91cb4450b9e9fb6e59aa2bda2d6fde4aeaeb1a">logs</a> 32</li>
+<li><a href=2022-03-14-092016-13424-1@2e91cb4450b9_Wsign-compare title="Fix [-Wsign-compare] warnings
+
+Fixes the warnings:
+
+../src/aspam-settings.c: In function 'aspam_settings_delete_match':
+../src/aspam-settings.c:210:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  210 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^
+../src/aspam-settings.c:213:15: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  213 |       if (i+1 != match_list_length)
+      |               ^~
+
+../src/aspam-window.c: In function 'aspam_window_window_populate':
+../src/aspam-window.c:98:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+   98 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^">2022-03-14-092016-13424-1@2e91cb4450b9_Wsign-compare</a> <a href="2022-03-14-092016-13424-1@2e91cb4450b9_Wsign-compare/output_2e91cb4450b9e9fb6e59aa2bda2d6fde4aeaeb1a">logs</a> 32</li>
+<li><a href=2022-03-14-085308-4608-cppcheck@5c38ca212867_Wmissing-field-initializers title="aspam-application: Fix [-Wmissing-field-initializers] warning
+
+Fixes the warning:
+../src/aspam-application.c:143:5: warning: missing initializer for field 'parameter_type' of 'GActionEntry' {aka 'const struct _GActionEntry'} [-Wmissing-field-initializers]
+  143 |     { help, aspam_application_show_help },
+      |     ^">2022-03-14-085308-4608-cppcheck@5c38ca212867_Wmissing-field-initializers</a> <a href="2022-03-14-085308-4608-cppcheck@5c38ca212867_Wmissing-field-initializers/output_5c38ca212867cc80d2e2200df756af064fa827a2">logs</a> 34</li>
+<li><a href=2022-03-14-085301-13427-1@5c38ca212867_Wmissing-field-initializers title="aspam-application: Fix [-Wmissing-field-initializers] warning
+
+Fixes the warning:
+../src/aspam-application.c:143:5: warning: missing initializer for field 'parameter_type' of 'GActionEntry' {aka 'const struct _GActionEntry'} [-Wmissing-field-initializers]
+  143 |     { help, aspam_application_show_help },
+      |     ^">2022-03-14-085301-13427-1@5c38ca212867_Wmissing-field-initializers</a> <a href="2022-03-14-085301-13427-1@5c38ca212867_Wmissing-field-initializers/output_5c38ca212867cc80d2e2200df756af064fa827a2">logs</a> 34</li>
+<li><a href=2022-03-14-074856-9882-cppcheck@6829f05b3466_Dead_assignment title="aspam-settings: Remove dead assignment">2022-03-14-074856-9882-cppcheck@6829f05b3466_Dead_assignment</a> <a href="2022-03-14-074856-9882-cppcheck@6829f05b3466_Dead_assignment/output_6829f05b3466c03613dd1d62b414eaadb1aa762b">logs</a> 33</li>
+<li><a href=2022-03-13-234048-6602-cppcheck@40ffccf209ca_master title="ci: add ci">2022-03-13-234048-6602-cppcheck@40ffccf209ca_master</a> <a href="2022-03-13-234048-6602-cppcheck@40ffccf209ca_master/output_40ffccf209ca01de7b01dab443c41f32fd1d58d8">logs</a> 35</li>
+<li><a href=2022-03-13-234038-13422-1@40ffccf209ca_master title="ci: add ci">2022-03-13-234038-13422-1@40ffccf209ca_master</a> <a href="2022-03-13-234038-13422-1@40ffccf209ca_master/output_40ffccf209ca01de7b01dab443c41f32fd1d58d8">logs</a> 35</li>
+</ul>
+3.1M
+</body>
+</html>

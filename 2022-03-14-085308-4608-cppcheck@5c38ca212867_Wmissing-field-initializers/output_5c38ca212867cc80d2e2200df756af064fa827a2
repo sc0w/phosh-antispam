@@ -1,0 +1,353 @@
+Checking src/aspam-application.c ...
+src/aspam-application.c:53:19: style: struct member '_ASpamApplication::main_window' is never used. [unusedStructMember]
+  GtkWindow      *main_window;
+                  ^
+src/aspam-application.c:55:19: style: struct member '_ASpamApplication::settings' is never used. [unusedStructMember]
+  ASpamSettings  *settings;
+                  ^
+src/aspam-application.c:56:19: style: struct member '_ASpamApplication::client' is never used. [unusedStructMember]
+  ASpamClient    *client;
+                  ^
+Checking src/aspam-application.c: HAVE_CONFIG_H...
+1/8 files checked 13% done
+Checking src/aspam-client.c ...
+src/aspam-client.c:32:21: style: struct member '_ASpamClient::connection' is never used. [unusedStructMember]
+  GDBusConnection  *connection;
+                    ^
+src/aspam-client.c:33:21: style: struct member '_ASpamClient::calls_watch_id' is never used. [unusedStructMember]
+  unsigned int      calls_watch_id;
+                    ^
+src/aspam-client.c:36:21: style: struct member '_ASpamClient::calls_phone_proxy' is never used. [unusedStructMember]
+  GDBusProxy       *calls_phone_proxy;
+                    ^
+src/aspam-client.c:37:21: style: struct member '_ASpamClient::calls_phone_signal_added_id' is never used. [unusedStructMember]
+  unsigned int      calls_phone_signal_added_id;
+                    ^
+src/aspam-client.c:38:21: style: struct member '_ASpamClient::calls_phone_signal_removed_id' is never used. [unusedStructMember]
+  unsigned int      calls_phone_signal_removed_id;
+                    ^
+src/aspam-client.c:40:9: style: struct member '_ASpamClient::allow_callback_number' is never used. [unusedStructMember]
+  char *allow_callback_number;
+        ^
+2/8 files checked 32% done
+Checking src/aspam-log.c ...
+3/8 files checked 49% done
+Checking src/aspam-pattern-row.c ...
+4/8 files checked 54% done
+Checking src/aspam-settings.c ...
+src/aspam-settings.c:59:1: error: There is an unknown macro here somewhere. Configuration is required. If G_DEFINE_TYPE is a macro then please configure it. [unknownMacro]
+G_DEFINE_TYPE (ASpamSettings, aspam_settings, G_TYPE_OBJECT)
+^
+Checking src/aspam-settings.c: HAVE_CONFIG_H...
+5/8 files checked 74% done
+Checking src/aspam-utils.c ...
+Checking src/aspam-utils.c: HAVE_CONFIG_H...
+6/8 files checked 76% done
+Checking src/aspam-window.c ...
+src/aspam-window.c:43:18: style: struct member '_ASpamWindow::settings' is never used. [unusedStructMember]
+  ASpamSettings *settings;
+                 ^
+src/aspam-window.c:45:16: style: struct member '_ASpamWindow::menu_button' is never used. [unusedStructMember]
+  GtkWidget   *menu_button;
+               ^
+src/aspam-window.c:46:16: style: struct member '_ASpamWindow::enable_aspam_switch' is never used. [unusedStructMember]
+  GtkWidget   *enable_aspam_switch;
+               ^
+src/aspam-window.c:47:16: style: struct member '_ASpamWindow::silence_switch' is never used. [unusedStructMember]
+  GtkWidget   *silence_switch;
+               ^
+src/aspam-window.c:48:16: style: struct member '_ASpamWindow::allow_callback_switch' is never used. [unusedStructMember]
+  GtkWidget   *allow_callback_switch;
+               ^
+src/aspam-window.c:49:16: style: struct member '_ASpamWindow::callback_timeout_text' is never used. [unusedStructMember]
+  GtkWidget   *callback_timeout_text;
+               ^
+src/aspam-window.c:50:16: style: struct member '_ASpamWindow::callback_timeout_button' is never used. [unusedStructMember]
+  GtkWidget   *callback_timeout_button;
+               ^
+src/aspam-window.c:51:16: style: struct member '_ASpamWindow::allow_blocked_numbers_switch' is never used. [unusedStructMember]
+  GtkWidget   *allow_blocked_numbers_switch;
+               ^
+src/aspam-window.c:52:16: style: struct member '_ASpamWindow::new_whitelist' is never used. [unusedStructMember]
+  GtkWidget   *new_whitelist;
+               ^
+src/aspam-window.c:53:16: style: struct member '_ASpamWindow::new_whitelist_text' is never used. [unusedStructMember]
+  GtkWidget   *new_whitelist_text;
+               ^
+src/aspam-window.c:54:16: style: struct member '_ASpamWindow::new_whitelist_button' is never used. [unusedStructMember]
+  GtkWidget   *new_whitelist_button;
+               ^
+Checking src/aspam-window.c: HAVE_CONFIG_H...
+7/8 files checked 97% done
+Checking src/main.c ...
+Checking src/main.c: HAVE_CONFIG_H...
+8/8 files checked 100% done
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingInclude]
+
+scan-build: Using '/usr/lib/llvm-13/bin/clang' for static analysis
+The Meson build system
+Version: 0.61.2
+Source dir: /rootdir
+Build dir: /rootdir/_build
+Build type: native build
+Project name: phosh-antispam
+Project version: 2.0
+C compiler for the host machine: /usr/share/clang/scan-build-13/bin/../libexec/ccc-analyzer (gcc 11.2.0 "gcc (Debian 11.2.0-16) 11.2.0")
+C linker for the host machine: /usr/share/clang/scan-build-13/bin/../libexec/ccc-analyzer ld.bfd 2.38
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Configuring config.h using configuration
+Configuring run using configuration
+Compiler for C supports arguments -fasynchronous-unwind-tables: YES 
+Compiler for C supports arguments -fno-strict-aliasing: YES 
+Compiler for C supports arguments -Wall: YES 
+Compiler for C supports arguments -Wcast-align: YES 
+Compiler for C supports arguments -Wdate-time: YES 
+Compiler for C supports arguments -Werror=format-security: YES 
+Compiler for C supports arguments -Werror=implicit-function-declaration: YES 
+Compiler for C supports arguments -Werror=pointer-to-int-cast: YES 
+Compiler for C supports arguments -Werror=redundant-decls: YES 
+Compiler for C supports arguments -Werror=return-type: YES 
+Compiler for C supports arguments -Werror=vla: YES 
+Compiler for C supports arguments -Werror=write-strings: YES 
+Compiler for C supports arguments -Wfloat-equal: YES 
+Compiler for C supports arguments -Wformat=2: YES 
+Compiler for C supports arguments -Wimplicit-fallthrough: YES 
+Compiler for C supports arguments -Wlogical-op: YES 
+Compiler for C supports arguments -Wmissing-format-attribute: YES 
+Compiler for C supports arguments -Wmissing-include-dirs: YES 
+Compiler for C supports arguments -Wmissing-prototypes: YES 
+Compiler for C supports arguments -Wnested-externs: YES 
+Compiler for C supports arguments -Wold-style-declaration: YES 
+Compiler for C supports arguments -Wold-style-definition: YES 
+Compiler for C supports arguments -Wpointer-arith: YES 
+Compiler for C supports arguments -Wshadow: YES 
+Compiler for C supports arguments -Wswitch-default: YES 
+Compiler for C supports arguments -Wswitch-enum: YES 
+Compiler for C supports arguments -Wtrigraphs: YES 
+Compiler for C supports arguments -Wunused: YES 
+Compiler for C supports arguments -pipe: YES 
+Found pkg-config: /usr/bin/pkg-config (0.29.2)
+Run-time dependency glib-2.0 found: YES 2.70.4
+Run-time dependency gtk+-3.0 found: YES 3.24.33
+Run-time dependency libhandy-1 found: YES 1.5.91
+Found git repository at /rootdir
+Found pkg-config: /usr/bin/pkg-config (0.29.2)
+Program glib-compile-resources found: YES (/usr/bin/glib-compile-resources)
+Configuring org.kop316.antispamdesktop.in using configuration
+Configuring org.kop316.antispam-daemondesktop.in using configuration
+Program glib-compile-schemas found: YES (/usr/bin/glib-compile-schemas)
+Program desktop-file-validate found: NO
+Program glib-compile-schemas found: YES (/usr/bin/glib-compile-schemas)
+Program appstream-util found: NO
+Program xsltproc found: YES (/usr/bin/xsltproc)
+Dependency glib-2.0 found: YES 2.70.4 (cached)
+Dependency gtk+-3.0 found: YES 3.24.33 (cached)
+Configuring version.xml using configuration
+Program gtkdoc-scan found: YES (/usr/bin/gtkdoc-scan)
+Program gtkdoc-scangobj found: YES (/usr/bin/gtkdoc-scangobj)
+Program gtkdoc-mkdb found: YES (/usr/bin/gtkdoc-mkdb)
+Program gtkdoc-mkhtml found: YES (/usr/bin/gtkdoc-mkhtml)
+Program gtkdoc-fixxref found: YES (/usr/bin/gtkdoc-fixxref)
+Found CMake: /usr/bin/cmake (3.22.1)
+Run-time dependency bash-completion found: NO (tried pkgconfig and cmake)
+Program build-aux/make_po.sh found: YES (/rootdir/build-aux/make_po.sh)
+Program build-aux/make_po.sh found: YES (/rootdir/build-aux/make_po.sh)
+Message: 
+        phosh-antispam 2.0
+        ==============================
+
+        prefix:          /usr/local
+        compiler:        gcc 11.2.0
+        compiler args:   -fasynchronous-unwind-tables -fno-strict-aliasing -Wall -Wcast-align -Wdate-time -Werror=format-security -Werror=implicit-function-declaration -Werror=pointer-to-int-cast -Werror=redundant-decls -Werror=return-type -Werror=vla -Werror=write-strings -Wfloat-equal -Wformat=2 -Wimplicit-fallthrough -Wlogical-op -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-prototypes -Wnested-externs -Wold-style-declaration -Wold-style-definition -Wpointer-arith -Wshadow -Wswitch-default -Wswitch-enum -Wtrigraphs -Wunused -pipe
+        build type:      debugoptimized
+        host system:     GNU/Linux
+        tests:           true
+        manpage:         true
+        documentation:   true
+        translations:    true
+        help:            false
+        bash-completion: true
+
+Build targets in project: 19
+NOTICE: Future-deprecated features used:
+ * 0.56.0: {'meson.source_root', 'gui_app arg in executable', 'Dependency.get_pkgconfig_variable', 'meson.build_root'}
+
+phosh-antispam 2.0
+
+  User defined options
+    gtk_doc: true
+
+Found ninja-1.10.1 at /usr/bin/ninja
+scan-build: Analysis run complete.
+scan-build: Removing directory '/rootdir/html-report/2022-03-14-085254-12995-1' because it contains no reports.
+scan-build: No bugs found.
+scan-build: Using '/usr/lib/llvm-13/bin/clang' for static analysis
+ninja: Entering directory `_build'
+[1/21] Generating src/resources_h with a custom command
+xml-stripblanks preprocessing requested, but XMLLINT is not set, and xmllint is not in PATH
+[2/21] Generating src/resources_c with a custom command
+xml-stripblanks preprocessing requested, but XMLLINT is not set, and xmllint is not in PATH
+[3/21] Generating data/org.kop316.antispam-daemon.desktop with a custom command
+[4/21] Generating data/gsettings-compile-data with a custom command
+[5/21] Generating data/org.kop316.antispam.desktop with a custom command
+[6/21] Generating src/version.h with a custom command
+fatal: No names found, cannot describe anything.
+[7/21] Generating docs/man/phosh-antispam.1 with a custom command
+[8/21] Generating data/metainfo/org.kop316.antispam.metainfo.xml with a custom command
+[9/21] Compiling C object src/libantispam.so.p/aspam-utils.c.o
+[10/21] Compiling C object src/libantispam.so.p/aspam-settings.c.o
+../src/aspam-settings.c: In function 'aspam_settings_delete_match':
+../src/aspam-settings.c:210:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  210 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^
+../src/aspam-settings.c:213:15: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+  213 |       if (i+1 != match_list_length)
+      |               ^~
+../src/aspam-settings.c:316:5: warning: Value stored to 'new_match_list' is never read [deadcode.DeadStores]
+    new_match_list = g_strsplit ("", ",", -1);
+    ^                ~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+[11/21] Compiling C object src/libantispam.so.p/aspam-window.c.o
+../src/aspam-window.c: In function 'aspam_window_window_populate':
+../src/aspam-window.c:98:21: warning: comparison of integer expressions of different signedness: 'int' and 'guint' {aka 'unsigned int'} [-Wsign-compare]
+   98 |   for (int i = 0; i < match_list_length; i++) {
+      |                     ^
+[12/21] Compiling C object src/libantispam.so.p/aspam-client.c.o
+../src/aspam-client.c: In function 'call_added_cb':
+../src/aspam-client.c:129:33: warning: unused parameter 'connection' [-Wunused-parameter]
+  129 | call_added_cb (GDBusConnection *connection,
+      |                ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+../src/aspam-client.c:130:33: warning: unused parameter 'sender_name' [-Wunused-parameter]
+  130 |                const char      *sender_name,
+      |                ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c:131:33: warning: unused parameter 'object_path' [-Wunused-parameter]
+  131 |                const char      *object_path,
+      |                ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c:132:33: warning: unused parameter 'interface_name' [-Wunused-parameter]
+  132 |                const char      *interface_name,
+      |                ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+../src/aspam-client.c:133:33: warning: unused parameter 'signal_name' [-Wunused-parameter]
+  133 |                const char      *signal_name,
+      |                ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c: In function 'call_removed_cb':
+../src/aspam-client.c:230:35: warning: unused parameter 'connection' [-Wunused-parameter]
+  230 | call_removed_cb (GDBusConnection *connection,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+../src/aspam-client.c:231:35: warning: unused parameter 'sender_name' [-Wunused-parameter]
+  231 |                  const char      *sender_name,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c:232:35: warning: unused parameter 'object_path' [-Wunused-parameter]
+  232 |                  const char      *object_path,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c:233:35: warning: unused parameter 'interface_name' [-Wunused-parameter]
+  233 |                  const char      *interface_name,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+../src/aspam-client.c:234:35: warning: unused parameter 'signal_name' [-Wunused-parameter]
+  234 |                  const char      *signal_name,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-client.c:235:35: warning: unused parameter 'parameters' [-Wunused-parameter]
+  235 |                  GVariant        *parameters,
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+../src/aspam-client.c:236:35: warning: unused parameter 'user_data' [-Wunused-parameter]
+  236 |                  gpointer         user_data)
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~
+../src/aspam-client.c: In function 'get_calls_object_manager_interface_cb':
+../src/aspam-client.c:245:54: warning: unused parameter 'manager' [-Wunused-parameter]
+  245 | get_calls_object_manager_interface_cb (GObject      *manager,
+      |                                        ~~~~~~~~~~~~~~^~~~~~~
+../src/aspam-client.c: In function 'calls_appeared_cb':
+../src/aspam-client.c:290:36: warning: unused parameter 'name' [-Wunused-parameter]
+  290 |                   const char      *name,
+      |                   ~~~~~~~~~~~~~~~~~^~~~
+../src/aspam-client.c:291:36: warning: unused parameter 'name_owner' [-Wunused-parameter]
+  291 |                   const char      *name_owner,
+      |                   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+../src/aspam-client.c: In function 'calls_vanished_cb':
+../src/aspam-client.c:312:37: warning: unused parameter 'connection' [-Wunused-parameter]
+  312 | calls_vanished_cb (GDBusConnection *connection,
+      |                    ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+../src/aspam-client.c:313:36: warning: unused parameter 'name' [-Wunused-parameter]
+  313 |                   const char      *name,
+      |                   ~~~~~~~~~~~~~~~~~^~~~
+../src/aspam-client.c: In function 'aspam_client_init':
+../src/aspam-client.c:365:33: warning: unused parameter 'self' [-Wunused-parameter]
+  365 | aspam_client_init (ASpamClient *self)
+      |                    ~~~~~~~~~~~~~^~~~
+../src/aspam-client.c: At top level:
+../src/aspam-client.c:25: warning: macro "SETTINGS_GROUP_SPAM_BLOCK" is not used [-Wunused-macros]
+   25 | #define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
+      | 
+../src/aspam-client.c:24: warning: macro "SETTING_NAME" is not used [-Wunused-macros]
+   24 | #define SETTING_NAME     "gnome_calls_spam_options"
+      | 
+[13/21] Compiling C object src/libantispam.so.p/aspam-pattern-row.c.o
+In file included from /usr/include/glib-2.0/gobject/gobject.h:24,
+                 from /usr/include/glib-2.0/gobject/gbinding.h:29,
+                 from /usr/include/glib-2.0/glib-object.h:22,
+                 from /usr/include/glib-2.0/gio/gioenums.h:28,
+                 from /usr/include/glib-2.0/gio/giotypes.h:28,
+                 from /usr/include/glib-2.0/gio/gio.h:26,
+                 from /usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:28,
+                 from /usr/include/gtk-3.0/gdk/gdk.h:32,
+                 from /usr/include/gtk-3.0/gtk/gtk.h:30,
+                 from /usr/include/libhandy-1/handy.h:9,
+                 from ../src/aspam-pattern-row.h:20,
+                 from ../src/aspam-pattern-row.c:21:
+../src/aspam-pattern-row.c:29:33: warning: no previous prototype for 'aspam_pattern_row_get_type' [-Wmissing-prototypes]
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      |                                 ^~~~~~~~~~~~~~~~~
+/usr/include/glib-2.0/gobject/gtype.h:2097:1: note: in definition of macro '_G_DEFINE_TYPE_EXTENDED_BEGIN_PRE'
+ 2097 | type_name##_get_type (void) \
+      | ^~~~~~~~~
+/usr/include/glib-2.0/gobject/gtype.h:1861:61: note: in expansion of macro '_G_DEFINE_TYPE_EXTENDED_BEGIN'
+ 1861 | #define G_DEFINE_TYPE_EXTENDED(TN, t_n, T_P, _f_, _C_)      _G_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, _f_) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/glib-2.0/gobject/gtype.h:1642:61: note: in expansion of macro 'G_DEFINE_TYPE_EXTENDED'
+ 1642 | #define G_DEFINE_TYPE(TN, t_n, T_P)                         G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, 0, {})
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~
+../src/aspam-pattern-row.c:29:1: note: in expansion of macro 'G_DEFINE_TYPE'
+   29 | G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
+      | ^~~~~~~~~~~~~
+[14/21] Compiling C object src/phosh-antispam.p/meson-generated_.._resources.c.o
+[15/21] Compiling C object src/phosh-antispam.p/main.c.o
+[16/21] Generating po/ar/LC_MESSAGES/phosh-antispam-ar.mo with a custom command
+[17/21] Compiling C object src/phosh-antispam.p/aspam-application.c.o
+../src/aspam-application.c: In function 'cmd_verbose_cb':
+../src/aspam-application.c:90:30: warning: unused parameter 'option_name' [-Wunused-parameter]
+   90 | cmd_verbose_cb (const char  *option_name,
+      |                 ~~~~~~~~~~~~~^~~~~~~~~~~
+../src/aspam-application.c:91:30: warning: unused parameter 'value' [-Wunused-parameter]
+   91 |                 const char  *value,
+      |                 ~~~~~~~~~~~~~^~~~~
+../src/aspam-application.c:92:30: warning: unused parameter 'data' [-Wunused-parameter]
+   92 |                 gpointer     data,
+      |                 ~~~~~~~~~~~~~^~~~
+../src/aspam-application.c:93:30: warning: unused parameter 'error' [-Wunused-parameter]
+   93 |                 GError     **error)
+      |                 ~~~~~~~~~~~~~^~~~~
+../src/aspam-application.c: In function 'aspam_application_show_help':
+../src/aspam-application.c:101:45: warning: unused parameter 'action' [-Wunused-parameter]
+  101 | aspam_application_show_help (GSimpleAction *action,
+      |                              ~~~~~~~~~~~~~~~^~~~~~
+../src/aspam-application.c:102:43: warning: unused parameter 'parameter' [-Wunused-parameter]
+  102 |                            GVariant      *parameter,
+      |                            ~~~~~~~~~~~~~~~^~~~~~~~~
+../src/aspam-application.c: At top level:
+../src/aspam-application.c:218:1: warning: no previous prototype for 'on_widget_deleted' [-Wmissing-prototypes]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      | ^~~~~~~~~~~~~~~~~
+../src/aspam-application.c: In function 'on_widget_deleted':
+../src/aspam-application.c:218:48: warning: unused parameter 'event' [-Wunused-parameter]
+  218 | on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
+      |                                      ~~~~~~~~~~^~~~~
+[18/21] Compiling C object src/libantispam.so.p/aspam-log.c.o
+[19/21] Linking static target src/libantispam.a
+[20/21] Linking target src/libantispam.so
+[21/21] Linking target src/phosh-antispam
+scan-build: Analysis run complete.
+scan-build: 1 bug found.
+scan-build: Run 'scan-view /rootdir/html-report/2022-03-14-085301-13427-1' to examine bug reports.
+Total time 0 minutes and 14
+Errors detected in the build 0
+Warnings detected in the logs 34
