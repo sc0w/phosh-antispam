@@ -207,7 +207,7 @@ aspam_settings_delete_match (ASpamSettings *self,
 
   match_list_length = g_strv_length (self->match_list);
   new_csv_string = g_string_new (NULL);
-  for (int i = 0; i < match_list_length; i++) {
+  for (guint i = 0; i < match_list_length; i++) {
     if (g_strcmp0 (self->match_list[i], match) != 0) {
       new_csv_string = g_string_append (new_csv_string, self->match_list[i]);
       if (i+1 != match_list_length)

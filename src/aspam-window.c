@@ -95,7 +95,7 @@ aspam_window_window_populate (ASpamWindow *self)
 
   match_list_length = g_strv_length (match_list);
 
-  for (int i = 0; i < match_list_length; i++) {
+  for (guint i = 0; i < match_list_length; i++) {
     ASpamPatternRow *new_row;
 
     if (!*match_list[i])
