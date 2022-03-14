@@ -26,6 +26,8 @@ struct _ASpamPatternRow
   HdyActionRow parent_instance;
 };
 
+static GType aspam_pattern_row_get_type (void);
+
 G_DEFINE_TYPE (ASpamPatternRow, aspam_pattern_row, HDY_TYPE_ACTION_ROW)
 
 static void

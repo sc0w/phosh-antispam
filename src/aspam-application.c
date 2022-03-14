@@ -214,7 +214,7 @@ aspam_application_command_line (GApplication            *application,
   return 0;
 }
 
-gboolean
+static gboolean
 on_widget_deleted(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
   ASpamApplication *self = (ASpamApplication *)data;
