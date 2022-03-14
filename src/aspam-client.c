@@ -21,9 +21,6 @@
 #include "aspam-client.h"
 #include "aspam-settings.h"
 
-#define SETTING_NAME     "gnome_calls_spam_options"
-#define SETTINGS_GROUP_SPAM_BLOCK "Spam Block"
-
 struct _ASpamClient
 {
   GObject     parent_instance;
