@@ -140,7 +140,7 @@ static void
 aspam_application_add_actions (ASpamApplication *self)
 {
   static const GActionEntry app_entries[] = {
-    { "help", aspam_application_show_help },
+    { .name = "help", .activate = aspam_application_show_help },
   };
 
   struct
